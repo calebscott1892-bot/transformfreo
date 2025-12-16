@@ -8,10 +8,6 @@ export default function Resources() {
         {
             title: 'What is Salvation? And what should I do next?',
             url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/342fbd43b_TransformFremantleSalvationandNextStepsDec2025-1.pdf'
-        },
-        {
-            title: 'Orderly Worship, the use of spiritual gifts, lessons from past revivals, and discerning & dealing with evil spirits',
-            url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/98980bab7_TFOrderlyWorshipDec25-1.pdf'
         }
     ];
 
