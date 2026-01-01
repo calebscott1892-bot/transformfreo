@@ -6,8 +6,24 @@ import { Download, FileText } from 'lucide-react';
 export default function Resources() {
     const resources = [
         {
-            title: 'What is Salvation? And what should I do next?',
-            url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/342fbd43b_TransformFremantleSalvationandNextStepsDec2025-1.pdf'
+            title: 'Confession, Repentance And Forgiveness of Sin',
+            url: 'https://pdflink.to/478b8144/',
+            edition: 'January 2026 Edition'
+        },
+        {
+            title: 'Lessons from Past Revivals',
+            url: 'https://pdflink.to/222ca705/',
+            edition: 'January 2026 Edition'
+        },
+        {
+            title: 'Orderly Worship',
+            url: 'https://pdflink.to/fb270c4c/',
+            edition: 'January 2026 Edition'
+        },
+        {
+            title: 'What is Salvation? And What Should I do Next?',
+            url: 'https://pdflink.to/8801e3fe/',
+            edition: 'January 2026 Edition'
         }
     ];
 
@@ -43,7 +59,7 @@ export default function Resources() {
                                 <h3 className="text-lg font-semibold text-[#1E3A5F] group-hover:text-[#7C6A9F] transition-colors mb-1">
                                     {resource.title}
                                 </h3>
-                                <p className="text-sm text-slate-500">PDF Document</p>
+                                <p className="text-sm text-slate-500">{resource.edition} • PDF Document</p>
                             </div>
                             <Download className="w-6 h-6 text-[#7C6A9F] group-hover:text-[#1E3A5F] transition-colors flex-shrink-0" strokeWidth={2} />
                         </a>
