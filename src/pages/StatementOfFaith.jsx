@@ -20,7 +20,7 @@ export default function StatementOfFaith() {
                         </div>
                         <h2 className="text-3xl font-bold text-[#1E3A5F] mb-3">The Apostles' Creed</h2>
                         <p className="text-lg text-slate-600">
-                            We hold to the doctrinal teaching contained in this historic creed:
+                            We share the core beliefs of the Bible as outlined in this historic creed:
                         </p>
                     </div>
 

@@ -51,7 +51,7 @@ export default function VisionAndAim() {
                 <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 border border-slate-200">
                     <h2 className="text-3xl font-bold text-[#1E3A5F] mb-6 text-center">Our Vision</h2>
                     <p className="text-xl text-slate-700 leading-relaxed text-center max-w-3xl mx-auto">
-                        Our vision is for Fremantle to be a peaceful city where multitudes find Jesus, 
+                        Our vision is for Fremantle to be a peaceful city where multitudes encounter Jesus, 
                         transform their lives, and go on to serve Christ.
                     </p>
                 </div>

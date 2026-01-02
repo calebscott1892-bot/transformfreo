@@ -8,9 +8,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
 
-const RECIPIENT_EMAIL = 'transformfreo@gmail.com';
-
-
 export default function Connect() {
     const [formData, setFormData] = useState({
         name: '',
@@ -26,7 +23,7 @@ export default function Connect() {
         
         try {
             await base44.integrations.Core.SendEmail({
-                to: RECIPIENT_EMAIL,
+                to: 'transformfreo@gmail.com',
                 subject: `Contact Form: Message from ${formData.name}`,
                 body: `Name: ${formData.name}\nEmail: ${formData.email}\nChurch: ${formData.church || 'Not provided'}\n\nMessage:\n${formData.message}`
             });
@@ -50,14 +47,14 @@ export default function Connect() {
     const connectOptions = [
         {
             icon: Phone,
-            title: 'Or Give Us a Call',
+            title: 'Give Us a Call',
             description: 'Please reach out to Liz Petersen',
             contact: 'Phone: 0404 077 194'
         },
         {
             icon: Instagram,
-            title: 'Find Us on Instagram!',
-            description: 'Follow us on Instagram for updates and inspiration',
+            title: 'Find Us on Instagram',
+            description: 'Follow us on Instagram for updates',
             link: 'https://www.instagram.com/transformfreo?igsh=NXRveXByYm9jMHAy&utm_source=qr'
         }
     ];

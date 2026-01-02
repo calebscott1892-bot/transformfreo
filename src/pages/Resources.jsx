@@ -6,7 +6,7 @@ import { Download, FileText } from 'lucide-react';
 export default function Resources() {
     const resources = [
         {
-            title: 'Confession, Repentance And Forgiveness of Sin',
+            title: 'Confession, Repentance and Forgiveness of Sin',
             url: 'https://pdflink.to/478b8144/',
             edition: 'January 2026 Edition'
         },
@@ -16,7 +16,7 @@ export default function Resources() {
             edition: 'January 2026 Edition'
         },
         {
-            title: 'Orderly Worship',
+            title: 'Orderly Worship & the Use of Spiritual Gifts',
             url: 'https://pdflink.to/fb270c4c/',
             edition: 'January 2026 Edition'
         },

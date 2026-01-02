@@ -45,8 +45,7 @@ export default function AboutUs() {
                         for the transformation of the City of Fremantle.
                     </p>
                     <p className="text-lg text-slate-700 leading-relaxed">
-                        Our vision is for Fremantle to be a peaceful city where many encounter Jesus, experience 
-                        real life change, and go on to serve Christ.
+                        Our vision is for Fremantle to be a peaceful city where multitudes encounter Jesus, transform their lives, and go on to serve Christ.
                     </p>
                 </div>
             </ContentSection>
