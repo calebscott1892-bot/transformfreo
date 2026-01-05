@@ -58,13 +58,13 @@ export default function Resources() {
                             key={index}
                             href={resource.url}
                             download={toSafePdfFilename(resource.title)}
-                            className="group flex items-center gap-4 p-6 bg-white rounded-xl shadow-md border-2 border-slate-200 hover:border-[#E8C468] hover:shadow-xl transition-all duration-300"
+                            className="group flex h-32 items-center gap-4 overflow-hidden p-6 bg-white rounded-xl shadow-md border-2 border-slate-200 hover:border-[#E8C468] hover:shadow-xl transition-all duration-300"
                         >
                             <div className="w-14 h-14 bg-gradient-to-br from-[#1E3A5F] to-[#7C6A9F] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <FileText className="w-7 h-7 text-white" strokeWidth={2} />
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-lg font-semibold text-[#1E3A5F] group-hover:text-[#7C6A9F] transition-colors mb-1">
+                                <h3 className="line-clamp-2 text-lg font-semibold text-[#1E3A5F] group-hover:text-[#7C6A9F] transition-colors mb-1">
                                     {resource.title}
                                 </h3>
                                 <p className="text-sm text-slate-500">{resource.edition} • PDF Document</p>
