@@ -13,54 +13,25 @@ export default function Resources() {
         return base.toLowerCase().endsWith('.pdf') ? base : `${base}.pdf`;
     };
 
-    const downloadPdf = async (url, filename) => {
-        // Prefer a direct download via blob so the PDF doesn't open in a new tab.
-        // If the host blocks cross-origin fetch (CORS), fall back to a normal link click.
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`Download failed: ${response.status}`);
-
-            const blob = await response.blob();
-            const blobUrl = window.URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-
-            window.URL.revokeObjectURL(blobUrl);
-        } catch (error) {
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            a.rel = 'noopener noreferrer';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-        }
-    };
-
     const resources = [
         {
             title: 'Confession, Repentance and Forgiveness of Sin',
-            url: 'https://pdflink.to/d5e5abd0/',
+            url: '/resources/confession-repentance-and-forgiveness-of-sin.pdf',
             edition: 'January 2026 Edition'
         },
         {
             title: 'Lessons from Past Revivals',
-            url: 'https://pdflink.to/222ca705/',
+            url: '/resources/lessons-from-past-revivals.pdf',
             edition: 'January 2026 Edition'
         },
         {
             title: 'Orderly Worship & the Use of Spiritual Gifts',
-            url: 'https://pdflink.to/fb270c4c/',
+            url: '/resources/orderly-worship-and-the-use-of-spiritual-gifts.pdf',
             edition: 'January 2026 Edition'
         },
         {
             title: 'What is Salvation? And What Should I do Next?',
-            url: 'https://pdflink.to/8801e3fe/',
+            url: '/resources/what-is-salvation-and-what-should-i-do-next.pdf',
             edition: 'January 2026 Edition'
         }
     ];
@@ -83,10 +54,10 @@ export default function Resources() {
 
                 <div className="space-y-4 max-w-3xl mx-auto">
                     {resources.map((resource, index) => (
-                        <button
+                        <a
                             key={index}
-                            type="button"
-                            onClick={() => downloadPdf(resource.url, toSafePdfFilename(resource.title))}
+                            href={resource.url}
+                            download={toSafePdfFilename(resource.title)}
                             className="group flex items-center gap-4 p-6 bg-white rounded-xl shadow-md border-2 border-slate-200 hover:border-[#E8C468] hover:shadow-xl transition-all duration-300"
                         >
                             <div className="w-14 h-14 bg-gradient-to-br from-[#1E3A5F] to-[#7C6A9F] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
@@ -99,7 +70,7 @@ export default function Resources() {
                                 <p className="text-sm text-slate-500">{resource.edition} • PDF Document</p>
                             </div>
                             <Download className="w-6 h-6 text-[#7C6A9F] group-hover:text-[#1E3A5F] transition-colors flex-shrink-0" strokeWidth={2} />
-                        </button>
+                        </a>
                     ))}
                 </div>
             </ContentSection>
