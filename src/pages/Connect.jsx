@@ -5,33 +5,65 @@ import { Mail, Send, Phone, Instagram, MapPin, Heart, Building2 } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
-import { base44 } from '@/api/base44Client';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from '@/config/contact';
 
 export default function Connect() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         church: '',
-        message: ''
+        message: '',
+        // Honeypot field (bots often fill hidden inputs)
+        website: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [notice, setNotice] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setNotice(null);
         
         try {
-            await base44.integrations.Core.SendEmail({
-                to: 'transformfreo@gmail.com',
-                subject: `Contact Form: Message from ${formData.name}`,
-                body: `Name: ${formData.name}\nEmail: ${formData.email}\nChurch: ${formData.church || 'Not provided'}\n\nMessage:\n${formData.message}`
+            if (import.meta.env.DEV) {
+                // Proves the handler is wired and will call the API.
+                console.log('[Connect] submit -> POST /api/send-email');
+            }
+
+            const res = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    church: formData.church,
+                    message: formData.message,
+                    website: formData.website
+                })
             });
-            
-            toast.success('Thank you for reaching out! We\'ll be in touch soon.');
-            setFormData({ name: '', email: '', church: '', message: '' });
+
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok || !data?.ok) {
+                throw new Error(data?.error || 'Failed to send message');
+            }
+
+            setNotice({
+                type: 'success',
+                message: 'Your email has been received! Check your inbox in the coming days for a reply.'
+            });
+            setFormData({ name: '', email: '', church: '', message: '', website: '' });
         } catch (error) {
-            toast.error('Failed to send message. Please try again.');
+            if (import.meta.env.DEV) {
+                console.error('[Connect] send failed', error);
+            }
+
+            setNotice({
+                type: 'error',
+                message: `Your email was not sent. Please try again, or call/text ${CONTACT_PHONE_DISPLAY}.`
+            });
         } finally {
             setIsSubmitting(false);
         }
@@ -49,7 +81,8 @@ export default function Connect() {
             icon: Phone,
             title: 'Give Us a Call',
             description: 'Please reach out to Liz Petersen',
-            contact: 'Phone: 0404 077 194'
+            contact: `Phone: ${CONTACT_PHONE_DISPLAY}`,
+            tel: CONTACT_PHONE_TEL
         },
         {
             icon: Instagram,
@@ -81,7 +114,42 @@ export default function Connect() {
                             </div>
                         </div>
 
+                        <AnimatePresence initial={false}>
+                            {notice ? (
+                                <motion.div
+                                    key={notice.type}
+                                    initial={{ opacity: 0, y: -8 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -8 }}
+                                    transition={{ duration: 0.2 }}
+                                    role={notice.type === 'error' ? 'alert' : 'status'}
+                                    aria-live={notice.type === 'error' ? 'assertive' : 'polite'}
+                                    className={
+                                        notice.type === 'error'
+                                            ? 'mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900'
+                                            : 'mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900'
+                                    }
+                                >
+                                    {notice.message}
+                                </motion.div>
+                            ) : null}
+                        </AnimatePresence>
+
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            <div className="hidden">
+                                <label htmlFor="website" className="block text-sm font-medium text-slate-700 mb-2">
+                                    Website
+                                </label>
+                                <Input
+                                    id="website"
+                                    name="website"
+                                    type="text"
+                                    value={formData.website}
+                                    onChange={handleChange}
+                                    autoComplete="off"
+                                    tabIndex={-1}
+                                />
+                            </div>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
                                     Your Name *
@@ -184,7 +252,16 @@ export default function Connect() {
                                         <h4 className="text-lg font-bold text-[#1E3A5F] mb-2">{option.title}</h4>
                                         <p className="text-slate-600 text-sm mb-3 leading-relaxed">{option.description}</p>
                                         {option.contact && (
-                                            <p className="text-sm text-[#7C6A9F] font-medium">{option.contact}</p>
+                                            option.tel ? (
+                                                <a
+                                                    href={`tel:${option.tel}`}
+                                                    className="text-sm text-[#7C6A9F] font-medium hover:underline"
+                                                >
+                                                    {option.contact}
+                                                </a>
+                                            ) : (
+                                                <p className="text-sm text-[#7C6A9F] font-medium">{option.contact}</p>
+                                            )
                                         )}
                                         {option.link && (
                                             <a 

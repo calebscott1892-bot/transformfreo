@@ -1,0 +1,949 @@
+diff --git a/README.md b/README.md
+index 6e24d63..04566f6 100644
+--- a/README.md
++++ b/README.md
+@@ -11,6 +11,38 @@ npm install
+ npm run dev
+ ```
+ 
++## Deployment (Vercel)
++
++### SPA routing (no 404 on refresh)
++
++This project is a Vite/React SPA. The repo includes a `vercel.json` rewrite so that refreshing routes like `/Connect` never returns 404.
++
++### Contact form email (serverless)
++
++The contact form posts to a Vercel Serverless Function at `/api/send-email`.
++
++**Required Vercel environment variables**
++
++- `RESEND_API_KEY` (required)
++- `CONTACT_TO_EMAIL` (optional, defaults to `transformfreo@gmail.com`)
++- `CONTACT_FROM_EMAIL` (optional, defaults to `Transform Fremantle <noreply@transformfreo.com>`)
++
++Notes:
++
++- `CONTACT_FROM_EMAIL` must be a sender identity verified in Resend.
++- User email is set as `Reply-To` for safe deliverability.
++
++## Updating Resource PDFs
++
++The Resources page links to PDFs served from `public/resources/`:
++
++- `public/resources/confession-repentance-and-forgiveness-of-sin.pdf`
++- `public/resources/lessons-from-past-revivals.pdf`
++- `public/resources/orderly-worship-and-the-use-of-spiritual-gifts.pdf`
++- `public/resources/what-is-salvation-and-what-should-i-do-next.pdf`
++
++**Preferred workflow (no code change):** replace the four PDF files locally using the exact same filenames, then commit and redeploy.
++
+ ## Building the app
+ 
+ ```bash
+diff --git a/eslint.config.js b/eslint.config.js
+index 238d2e4..a998e4a 100644
+--- a/eslint.config.js
++++ b/eslint.config.js
+@@ -6,6 +6,24 @@ import reactRefresh from 'eslint-plugin-react-refresh'
+ 
+ export default [
+   { ignores: ['dist'] },
++  {
++    files: [
++      'api/**/*.{js,jsx}',
++      '*.{config,conf}.{js,jsx}',
++      'vite.config.{js,jsx}',
++      'tailwind.config.{js,jsx}',
++      'postcss.config.{js,jsx}',
++      'eslint.config.{js,jsx}',
++    ],
++    languageOptions: {
++      ecmaVersion: 2020,
++      globals: globals.node,
++      parserOptions: {
++        ecmaVersion: 'latest',
++        sourceType: 'module',
++      },
++    },
++  },
+   {
+     files: ['**/*.{js,jsx}'],
+     languageOptions: {
+@@ -28,6 +46,22 @@ export default [
+       ...react.configs.recommended.rules,
+       ...react.configs['jsx-runtime'].rules,
+       ...reactHooks.configs.recommended.rules,
++
++      // This project doesn't use PropTypes; avoid hundreds of noisy errors.
++      'react/prop-types': 'off',
++
++      // Many shadcn/ui components use custom attributes; don't block builds on this.
++      'react/no-unknown-property': 'off',
++
++      // Allow apostrophes/quotes in JSX text without forcing HTML entities.
++      'react/no-unescaped-entities': 'off',
++
++      // Used in filename sanitisation.
++      'no-control-regex': 'off',
++
++      // React 17+ JSX runtime doesn't require importing React.
++      'no-unused-vars': ['error', { varsIgnorePattern: '^React$' }],
++
+       'react/jsx-no-target-blank': 'off',
+       'react-refresh/only-export-components': [
+         'warn',
+diff --git a/package-lock.json b/package-lock.json
+index 31817b8..f2d593d 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -35,7 +35,6 @@
+         "@radix-ui/react-toggle": "^1.1.2",
+         "@radix-ui/react-toggle-group": "^1.1.2",
+         "@radix-ui/react-tooltip": "^1.1.8",
+-        "base44-to-supabase-sdk": "github:Ai-Automators/base44-to-supabase-sdk",
+         "class-variance-authority": "^0.7.1",
+         "clsx": "^2.1.1",
+         "cmdk": "^1.0.0",
+@@ -52,6 +51,7 @@
+         "react-resizable-panels": "^2.1.7",
+         "react-router-dom": "^7.2.0",
+         "recharts": "^2.15.1",
++        "resend": "^4.1.0",
+         "sonner": "^2.0.1",
+         "tailwind-merge": "^3.0.2",
+         "tailwindcss-animate": "^1.0.7",
+@@ -3142,6 +3142,24 @@
+       "integrity": "sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==",
+       "license": "MIT"
+     },
++    "node_modules/@react-email/render": {
++      "version": "1.1.2",
++      "resolved": "https://registry.npmjs.org/@react-email/render/-/render-1.1.2.tgz",
++      "integrity": "sha512-RnRehYN3v9gVlNMehHPHhyp2RQo7+pSkHDtXPvg3s0GbzM9SQMW4Qrf8GRNvtpLC4gsI+Wt0VatNRUFqjvevbw==",
++      "license": "MIT",
++      "dependencies": {
++        "html-to-text": "^9.0.5",
++        "prettier": "^3.5.3",
++        "react-promise-suspense": "^0.3.4"
++      },
++      "engines": {
++        "node": ">=18.0.0"
++      },
++      "peerDependencies": {
++        "react": "^18.0 || ^19.0 || ^19.0.0-rc",
++        "react-dom": "^18.0 || ^19.0 || ^19.0.0-rc"
++      }
++    },
+     "node_modules/@rolldown/pluginutils": {
+       "version": "1.0.0-beta.27",
+       "resolved": "https://registry.npmjs.org/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.27.tgz",
+@@ -3457,92 +3475,24 @@
+         "win32"
+       ]
+     },
+-    "node_modules/@standard-schema/utils": {
+-      "version": "0.3.0",
+-      "resolved": "https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz",
+-      "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==",
+-      "license": "MIT"
+-    },
+-    "node_modules/@supabase/auth-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/auth-js/-/auth-js-2.87.1.tgz",
+-      "integrity": "sha512-6RDeOf5TVoaXFtEstN188ykp3pXLZaU9qoAWfx8dc50FFAAqt+kcFJ96V0IvSmcpb4mDAWcpTJ7BegmVDn/WIw==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "tslib": "2.8.1"
+-      },
+-      "engines": {
+-        "node": ">=20.0.0"
+-      }
+-    },
+-    "node_modules/@supabase/functions-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/functions-js/-/functions-js-2.87.1.tgz",
+-      "integrity": "sha512-rWmYo4gRD0XAjMhYDlz7IH67bp4TIQ1UE4VqwIQtl1gGPwtLDq6wcRnu7jLKlXx0Gtrknw/eoiHYG9//XrCTzQ==",
++    "node_modules/@selderee/plugin-htmlparser2": {
++      "version": "0.11.0",
++      "resolved": "https://registry.npmjs.org/@selderee/plugin-htmlparser2/-/plugin-htmlparser2-0.11.0.tgz",
++      "integrity": "sha512-P33hHGdldxGabLFjPPpaTxVolMrzrcegejx+0GxjrIb9Zv48D8yAIA/QTDR2dFl7Uz7urX8aX6+5bCZslr+gWQ==",
+       "license": "MIT",
+       "dependencies": {
+-        "tslib": "2.8.1"
++        "domhandler": "^5.0.3",
++        "selderee": "^0.11.0"
+       },
+-      "engines": {
+-        "node": ">=20.0.0"
+-      }
+-    },
+-    "node_modules/@supabase/postgrest-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/postgrest-js/-/postgrest-js-2.87.1.tgz",
+-      "integrity": "sha512-Yzu5eL3iGmZW0C/8x+vEojAOou63FI9oVw8HI8YOq63+5yM8g8aGh7Y1E2vbXFb7+gHGsPqLnaC6dPhrYt7qBA==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "tslib": "2.8.1"
+-      },
+-      "engines": {
+-        "node": ">=20.0.0"
+-      }
+-    },
+-    "node_modules/@supabase/realtime-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/realtime-js/-/realtime-js-2.87.1.tgz",
+-      "integrity": "sha512-XvLtEznxmYZXA7LYuy5zbSXpSYjDLJq2wQeRh3MzON2OR4U8Kq+RtPz2E2Wi8HEzvBfsc+nNu1TG8LQ9+3DRkA==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "@types/phoenix": "^1.6.6",
+-        "@types/ws": "^8.18.1",
+-        "tslib": "2.8.1",
+-        "ws": "^8.18.2"
+-      },
+-      "engines": {
+-        "node": ">=20.0.0"
+-      }
+-    },
+-    "node_modules/@supabase/storage-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/storage-js/-/storage-js-2.87.1.tgz",
+-      "integrity": "sha512-0Uc8tNV4yzkNNmp1inpXru0RB4a7ECq05G2S6BDvSpMxTxJrDVJ4vVDwyhqB8ZZ+O9+8prHaQYoByQeuDnwpFQ==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "iceberg-js": "^0.8.1",
+-        "tslib": "2.8.1"
+-      },
+-      "engines": {
+-        "node": ">=20.0.0"
++      "funding": {
++        "url": "https://ko-fi.com/killymxi"
+       }
+     },
+-    "node_modules/@supabase/supabase-js": {
+-      "version": "2.87.1",
+-      "resolved": "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.87.1.tgz",
+-      "integrity": "sha512-tVgqZqnHZVum584KuUKSQZgcy6ZkhVd6gG8QWg2QfIXH9HmXdamauxdVsLXwaNPJxEdOyfAfwIyi5XUsiVYWtg==",
+-      "license": "MIT",
+-      "peer": true,
+-      "dependencies": {
+-        "@supabase/auth-js": "2.87.1",
+-        "@supabase/functions-js": "2.87.1",
+-        "@supabase/postgrest-js": "2.87.1",
+-        "@supabase/realtime-js": "2.87.1",
+-        "@supabase/storage-js": "2.87.1"
+-      },
+-      "engines": {
+-        "node": ">=20.0.0"
+-      }
++    "node_modules/@standard-schema/utils": {
++      "version": "0.3.0",
++      "resolved": "https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz",
++      "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==",
++      "license": "MIT"
+     },
+     "node_modules/@types/babel__core": {
+       "version": "7.20.5",
+@@ -3670,17 +3620,13 @@
+       "version": "22.19.3",
+       "resolved": "https://registry.npmjs.org/@types/node/-/node-22.19.3.tgz",
+       "integrity": "sha512-1N9SBnWYOJTrNZCdh/yJE+t910Y128BoyY+zBLWhL3r0TYzlTmFdXrPwHL9DyFZmlEXNQQolTZh3KHV31QDhyA==",
++      "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "undici-types": "~6.21.0"
+       }
+     },
+-    "node_modules/@types/phoenix": {
+-      "version": "1.6.7",
+-      "resolved": "https://registry.npmjs.org/@types/phoenix/-/phoenix-1.6.7.tgz",
+-      "integrity": "sha512-oN9ive//QSBkf19rfDv45M7eZPi0eEXylht2OLEXicu5b4KoQ1OzXIw+xDSGWxSxe1JmepRR/ZH283vsu518/Q==",
+-      "license": "MIT"
+-    },
+     "node_modules/@types/prop-types": {
+       "version": "15.7.15",
+       "resolved": "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz",
+@@ -3711,15 +3657,6 @@
+         "@types/react": "^18.0.0"
+       }
+     },
+-    "node_modules/@types/ws": {
+-      "version": "8.18.1",
+-      "resolved": "https://registry.npmjs.org/@types/ws/-/ws-8.18.1.tgz",
+-      "integrity": "sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==",
+-      "license": "MIT",
+-      "dependencies": {
+-        "@types/node": "*"
+-      }
+-    },
+     "node_modules/@vitejs/plugin-react": {
+       "version": "4.7.0",
+       "resolved": "https://registry.npmjs.org/@vitejs/plugin-react/-/plugin-react-4.7.0.tgz",
+@@ -4067,17 +4004,6 @@
+       "dev": true,
+       "license": "MIT"
+     },
+-    "node_modules/base44-to-supabase-sdk": {
+-      "version": "1.0.0",
+-      "resolved": "git+ssh://git@github.com/Ai-Automators/base44-to-supabase-sdk.git#37e224357fdd6f1751a5d759fc1cefaef9ba8a9c",
+-      "license": "MIT",
+-      "engines": {
+-        "node": ">=16.0.0"
+-      },
+-      "peerDependencies": {
+-        "@supabase/supabase-js": "^2.0.0"
+-      }
+-    },
+     "node_modules/baseline-browser-mapping": {
+       "version": "2.9.7",
+       "resolved": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.9.7.tgz",
+@@ -4690,6 +4616,15 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/deepmerge": {
++      "version": "4.3.1",
++      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.3.1.tgz",
++      "integrity": "sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==",
++      "license": "MIT",
++      "engines": {
++        "node": ">=0.10.0"
++      }
++    },
+     "node_modules/define-data-property": {
+       "version": "1.1.4",
+       "resolved": "https://registry.npmjs.org/define-data-property/-/define-data-property-1.1.4.tgz",
+@@ -4777,6 +4712,61 @@
+         "csstype": "^3.0.2"
+       }
+     },
++    "node_modules/dom-serializer": {
++      "version": "2.0.0",
++      "resolved": "https://registry.npmjs.org/dom-serializer/-/dom-serializer-2.0.0.tgz",
++      "integrity": "sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==",
++      "license": "MIT",
++      "dependencies": {
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.2",
++        "entities": "^4.2.0"
++      },
++      "funding": {
++        "url": "https://github.com/cheeriojs/dom-serializer?sponsor=1"
++      }
++    },
++    "node_modules/domelementtype": {
++      "version": "2.3.0",
++      "resolved": "https://registry.npmjs.org/domelementtype/-/domelementtype-2.3.0.tgz",
++      "integrity": "sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==",
++      "funding": [
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/fb55"
++        }
++      ],
++      "license": "BSD-2-Clause"
++    },
++    "node_modules/domhandler": {
++      "version": "5.0.3",
++      "resolved": "https://registry.npmjs.org/domhandler/-/domhandler-5.0.3.tgz",
++      "integrity": "sha512-cgwlv/1iFQiFnU96XXgROh8xTeetsnJiDsTc7TYCLFd9+/WNkIqPTxiM/8pSd8VIrhXGTf1Ny1q1hquVqDJB5w==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "domelementtype": "^2.3.0"
++      },
++      "engines": {
++        "node": ">= 4"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domhandler?sponsor=1"
++      }
++    },
++    "node_modules/domutils": {
++      "version": "3.2.2",
++      "resolved": "https://registry.npmjs.org/domutils/-/domutils-3.2.2.tgz",
++      "integrity": "sha512-6kZKyUajlDuqlHKVX1w7gyslj9MPIXzIFiz/rGu35uC1wMi+kMhQwGhl4lt9unC9Vb9INnY9Z3/ZA3+FhASLaw==",
++      "license": "BSD-2-Clause",
++      "dependencies": {
++        "dom-serializer": "^2.0.0",
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.3"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/domutils?sponsor=1"
++      }
++    },
+     "node_modules/dunder-proto": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz",
+@@ -4851,6 +4841,18 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/entities": {
++      "version": "4.5.0",
++      "resolved": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz",
++      "integrity": "sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==",
++      "license": "BSD-2-Clause",
++      "engines": {
++        "node": ">=0.12"
++      },
++      "funding": {
++        "url": "https://github.com/fb55/entities?sponsor=1"
++      }
++    },
+     "node_modules/es-abstract": {
+       "version": "1.24.1",
+       "resolved": "https://registry.npmjs.org/es-abstract/-/es-abstract-1.24.1.tgz",
+@@ -5845,13 +5847,39 @@
+         "node": ">= 0.4"
+       }
+     },
+-    "node_modules/iceberg-js": {
+-      "version": "0.8.1",
+-      "resolved": "https://registry.npmjs.org/iceberg-js/-/iceberg-js-0.8.1.tgz",
+-      "integrity": "sha512-1dhVQZXhcHje7798IVM+xoo/1ZdVfzOMIc8/rgVSijRK38EDqOJoGula9N/8ZI5RD8QTxNQtK/Gozpr+qUqRRA==",
++    "node_modules/html-to-text": {
++      "version": "9.0.5",
++      "resolved": "https://registry.npmjs.org/html-to-text/-/html-to-text-9.0.5.tgz",
++      "integrity": "sha512-qY60FjREgVZL03vJU6IfMV4GDjGBIoOyvuFdpBDIX9yTlDw0TjxVBQp+P8NvpdIXNJvfWBTNul7fsAQJq2FNpg==",
+       "license": "MIT",
++      "dependencies": {
++        "@selderee/plugin-htmlparser2": "^0.11.0",
++        "deepmerge": "^4.3.1",
++        "dom-serializer": "^2.0.0",
++        "htmlparser2": "^8.0.2",
++        "selderee": "^0.11.0"
++      },
+       "engines": {
+-        "node": ">=20.0.0"
++        "node": ">=14"
++      }
++    },
++    "node_modules/htmlparser2": {
++      "version": "8.0.2",
++      "resolved": "https://registry.npmjs.org/htmlparser2/-/htmlparser2-8.0.2.tgz",
++      "integrity": "sha512-GYdjWKDkbRLkZ5geuHs5NY1puJ+PXwP7+fHPRz06Eirsb9ugf6d8kkXav6ADhcODhFFPMIXyxkxSuMf3D6NCFA==",
++      "funding": [
++        "https://github.com/fb55/htmlparser2?sponsor=1",
++        {
++          "type": "github",
++          "url": "https://github.com/sponsors/fb55"
++        }
++      ],
++      "license": "MIT",
++      "dependencies": {
++        "domelementtype": "^2.3.0",
++        "domhandler": "^5.0.3",
++        "domutils": "^3.0.1",
++        "entities": "^4.4.0"
+       }
+     },
+     "node_modules/iconv-lite": {
+@@ -6531,6 +6559,15 @@
+         "json-buffer": "3.0.1"
+       }
+     },
++    "node_modules/leac": {
++      "version": "0.6.0",
++      "resolved": "https://registry.npmjs.org/leac/-/leac-0.6.0.tgz",
++      "integrity": "sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://ko-fi.com/killymxi"
++      }
++    },
+     "node_modules/levn": {
+       "version": "0.4.1",
+       "resolved": "https://registry.npmjs.org/levn/-/levn-0.4.1.tgz",
+@@ -6959,6 +6996,19 @@
+         "node": ">=6"
+       }
+     },
++    "node_modules/parseley": {
++      "version": "0.12.1",
++      "resolved": "https://registry.npmjs.org/parseley/-/parseley-0.12.1.tgz",
++      "integrity": "sha512-e6qHKe3a9HWr0oMRVDTRhKce+bRO8VGQR3NyVwcjwrbhMmFCX9KszEV35+rn4AdilFAq9VPxP/Fe1wC9Qjd2lw==",
++      "license": "MIT",
++      "dependencies": {
++        "leac": "^0.6.0",
++        "peberminta": "^0.9.0"
++      },
++      "funding": {
++        "url": "https://ko-fi.com/killymxi"
++      }
++    },
+     "node_modules/path-exists": {
+       "version": "4.0.0",
+       "resolved": "https://registry.npmjs.org/path-exists/-/path-exists-4.0.0.tgz",
+@@ -6985,6 +7035,15 @@
+       "integrity": "sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==",
+       "license": "MIT"
+     },
++    "node_modules/peberminta": {
++      "version": "0.9.0",
++      "resolved": "https://registry.npmjs.org/peberminta/-/peberminta-0.9.0.tgz",
++      "integrity": "sha512-XIxfHpEuSJbITd1H3EeQwpcZbTLHc+VVr8ANI9t5sit565tsI4/xK3KWTUFE2e6QiangUkh3B0jihzmGnNrRsQ==",
++      "license": "MIT",
++      "funding": {
++        "url": "https://ko-fi.com/killymxi"
++      }
++    },
+     "node_modules/picocolors": {
+       "version": "1.1.1",
+       "resolved": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz",
+@@ -7218,6 +7277,21 @@
+         "node": ">= 0.8.0"
+       }
+     },
++    "node_modules/prettier": {
++      "version": "3.7.4",
++      "resolved": "https://registry.npmjs.org/prettier/-/prettier-3.7.4.tgz",
++      "integrity": "sha512-v6UNi1+3hSlVvv8fSaoUbggEM5VErKmmpGA7Pl3HF8V6uKY7rvClBOJlH6yNwQtfTueNkGVpOv/mtWL9L4bgRA==",
++      "license": "MIT",
++      "bin": {
++        "prettier": "bin/prettier.cjs"
++      },
++      "engines": {
++        "node": ">=14"
++      },
++      "funding": {
++        "url": "https://github.com/prettier/prettier?sponsor=1"
++      }
++    },
+     "node_modules/prop-types": {
+       "version": "15.8.1",
+       "resolved": "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz",
+@@ -7323,6 +7397,21 @@
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+       "license": "MIT"
+     },
++    "node_modules/react-promise-suspense": {
++      "version": "0.3.4",
++      "resolved": "https://registry.npmjs.org/react-promise-suspense/-/react-promise-suspense-0.3.4.tgz",
++      "integrity": "sha512-I42jl7L3Ze6kZaq+7zXWSunBa3b1on5yfvUW6Eo/3fFOj6dZ5Bqmcd264nJbTK/gn1HjjILAjSwnZbV4RpSaNQ==",
++      "license": "MIT",
++      "dependencies": {
++        "fast-deep-equal": "^2.0.1"
++      }
++    },
++    "node_modules/react-promise-suspense/node_modules/fast-deep-equal": {
++      "version": "2.0.1",
++      "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-2.0.1.tgz",
++      "integrity": "sha512-bCK/2Z4zLidyB4ReuIsvALH6w31YfAQDmXMqMx6FyfHqvBxtjC0eRumeSu4Bs3XtXwpyIywtSTrVT99BxY1f9w==",
++      "license": "MIT"
++    },
+     "node_modules/react-refresh": {
+       "version": "0.17.0",
+       "resolved": "https://registry.npmjs.org/react-refresh/-/react-refresh-0.17.0.tgz",
+@@ -7594,6 +7683,18 @@
+         "node": ">=0.10.0"
+       }
+     },
++    "node_modules/resend": {
++      "version": "4.8.0",
++      "resolved": "https://registry.npmjs.org/resend/-/resend-4.8.0.tgz",
++      "integrity": "sha512-R8eBOFQDO6dzRTDmaMEdpqrkmgSjPpVXt4nGfWsZdYOet0kqra0xgbvTES6HmCriZEXbmGk3e0DiGIaLFTFSHA==",
++      "license": "MIT",
++      "dependencies": {
++        "@react-email/render": "1.1.2"
++      },
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/resolve": {
+       "version": "2.0.0-next.5",
+       "resolved": "https://registry.npmjs.org/resolve/-/resolve-2.0.0-next.5.tgz",
+@@ -7788,6 +7889,18 @@
+         "loose-envify": "^1.1.0"
+       }
+     },
++    "node_modules/selderee": {
++      "version": "0.11.0",
++      "resolved": "https://registry.npmjs.org/selderee/-/selderee-0.11.0.tgz",
++      "integrity": "sha512-5TF+l7p4+OsnP8BCCvSyZiSPc4x4//p5uPwK8TCnVPJYRmU2aYKMpOXvw8zM5a5JvuuCGN1jmsMwuU2W02ukfA==",
++      "license": "MIT",
++      "dependencies": {
++        "parseley": "^0.12.0"
++      },
++      "funding": {
++        "url": "https://ko-fi.com/killymxi"
++      }
++    },
+     "node_modules/semver": {
+       "version": "6.3.1",
+       "resolved": "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz",
+@@ -8485,6 +8598,7 @@
+       "version": "6.21.0",
+       "resolved": "https://registry.npmjs.org/undici-types/-/undici-types-6.21.0.tgz",
+       "integrity": "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==",
++      "dev": true,
+       "license": "MIT"
+     },
+     "node_modules/update-browserslist-db": {
+@@ -8859,27 +8973,6 @@
+         "node": ">=8"
+       }
+     },
+-    "node_modules/ws": {
+-      "version": "8.18.3",
+-      "resolved": "https://registry.npmjs.org/ws/-/ws-8.18.3.tgz",
+-      "integrity": "sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg==",
+-      "license": "MIT",
+-      "engines": {
+-        "node": ">=10.0.0"
+-      },
+-      "peerDependencies": {
+-        "bufferutil": "^4.0.1",
+-        "utf-8-validate": ">=5.0.2"
+-      },
+-      "peerDependenciesMeta": {
+-        "bufferutil": {
+-          "optional": true
+-        },
+-        "utf-8-validate": {
+-          "optional": true
+-        }
+-      }
+-    },
+     "node_modules/y18n": {
+       "version": "5.0.8",
+       "resolved": "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz",
+diff --git a/package.json b/package.json
+index e17aebf..afd7e49 100644
+--- a/package.json
++++ b/package.json
+@@ -37,7 +37,7 @@
+     "@radix-ui/react-toggle": "^1.1.2",
+     "@radix-ui/react-toggle-group": "^1.1.2",
+     "@radix-ui/react-tooltip": "^1.1.8",
+-    "base44-to-supabase-sdk": "github:Ai-Automators/base44-to-supabase-sdk",
++    "resend": "^4.1.0",
+     "class-variance-authority": "^0.7.1",
+     "clsx": "^2.1.1",
+     "cmdk": "^1.0.0",
+diff --git a/src/api/base44Client.js b/src/api/base44Client.js
+index 4bbc378..0064a5f 100644
+--- a/src/api/base44Client.js
++++ b/src/api/base44Client.js
+@@ -1,21 +1,35 @@
+-// Import the correct public exports from the SDK to avoid rollup build errors
+-import { base44 } from 'base44-to-supabase-sdk/src/api/base44Client.js';
+-import { supabase } from 'base44-to-supabase-sdk/src/lib/supabase-client.js';
++// Base44 was partially migrated out of this project.
++// The Base44 SDK defaults to a local Supabase stack (e.g. 127.0.0.1:54321)
++// which must never be referenced by the production client bundle.
++//
++// This module remains only to avoid import-path breakage, but any usage should
++// be removed or replaced with app-owned backends (e.g. Vercel /api routes).
+ 
+-// Re‑export the clients so other files can import them
+-export { base44, supabase };
++const unsupported = (name) => {
++  throw new Error(
++    `${name} is not available: Base44/Supabase client has been removed from this app. ` +
++      'Use an app-owned API endpoint instead.'
++  );
++};
+ 
+-// Auth helpers
+-export const login = async (provider = 'dev', email, password) => {
+-  if (provider === 'password') {
+-    return supabase.auth.signInWithPassword({ email, password });
++export const base44 = new Proxy(
++  {},
++  {
++    get() {
++      return () => unsupported('base44');
++    }
+   }
+-  return base44.auth.login(provider);
+-};
++);
+ 
+-export const logout = async () => supabase.auth.signOut();
++export const supabase = new Proxy(
++  {},
++  {
++    get() {
++      return () => unsupported('supabase');
++    }
++  }
++);
+ 
+-export const getSession = async () => {
+-  const { data } = await supabase.auth.getSession();
+-  return data.session ?? null;
+-};
++export const login = async () => unsupported('login');
++export const logout = async () => unsupported('logout');
++export const getSession = async () => null;
+diff --git a/src/api/entities.js b/src/api/entities.js
+deleted file mode 100644
+index 857d440..0000000
+--- a/src/api/entities.js
++++ /dev/null
+@@ -1,7 +0,0 @@
+-import { base44, supabase, login, logout, getSession } from './base44Client';
+-
+-// Base44-compatible auth entity (Supabase-backed)
+-export const User = base44.auth;
+-
+-// Auth helpers for direct Supabase access
+-export { supabase, login, logout, getSession };
+\ No newline at end of file
+diff --git a/src/api/integrations.js b/src/api/integrations.js
+deleted file mode 100644
+index 46389fc..0000000
+--- a/src/api/integrations.js
++++ /dev/null
+@@ -1,26 +0,0 @@
+-import { base44 } from './base44Client';
+-
+-
+-
+-
+-export const Core = base44.integrations.Core;
+-
+-export const InvokeLLM = base44.integrations.Core.InvokeLLM;
+-
+-export const SendEmail = base44.integrations.Core.SendEmail;
+-
+-export const UploadFile = base44.integrations.Core.UploadFile;
+-
+-export const GenerateImage = base44.integrations.Core.GenerateImage;
+-
+-export const ExtractDataFromUploadedFile = base44.integrations.Core.ExtractDataFromUploadedFile;
+-
+-export const CreateFileSignedUrl = base44.integrations.Core.CreateFileSignedUrl;
+-
+-export const UploadPrivateFile = base44.integrations.Core.UploadPrivateFile;
+-
+-
+-
+-
+-
+-
+diff --git a/src/components/ui/use-toast.jsx b/src/components/ui/use-toast.jsx
+index b34b56f..ad55c4d 100644
+--- a/src/components/ui/use-toast.jsx
++++ b/src/components/ui/use-toast.jsx
+@@ -1,5 +1,5 @@
+ // Inspired by react-hot-toast library
+-import { useState, useEffect, createContext, useContext } from "react";
++import { useState, useEffect } from "react";
+ 
+ const TOAST_LIMIT = 20;
+ const TOAST_REMOVE_DELAY = 1000000;
+@@ -36,14 +36,6 @@ const addToRemoveQueue = (toastId) => {
+   toastTimeouts.set(toastId, timeout);
+ };
+ 
+-const clearFromRemoveQueue = (toastId) => {
+-  const timeout = toastTimeouts.get(toastId);
+-  if (timeout) {
+-    clearTimeout(timeout);
+-    toastTimeouts.delete(toastId);
+-  }
+-};
+-
+ export const reducer = (state, action) => {
+   switch (action.type) {
+     case actionTypes.ADD_TOAST:
+@@ -152,7 +144,7 @@ function useToast() {
+         listeners.splice(index, 1);
+       }
+     };
+-  }, [state]);
++  }, []);
+ 
+   return {
+     ...state,
+diff --git a/src/main.jsx b/src/main.jsx
+index a37fd51..be95311 100644
+--- a/src/main.jsx
++++ b/src/main.jsx
+@@ -3,6 +3,17 @@ import ReactDOM from 'react-dom/client'
+ import App from '@/App.jsx'
+ import '@/index.css'
+ 
++if (import.meta.env.PROD && typeof window !== 'undefined' && typeof window.fetch === 'function') {
++    const originalFetch = window.fetch.bind(window);
++    window.fetch = async (input, init) => {
++        const url = typeof input === 'string' ? input : input?.url;
++        if (typeof url === 'string' && /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:\d+)?\//.test(url)) {
++            throw new Error(`Blocked network request to local address in production: ${url}`);
++        }
++        return originalFetch(input, init);
++    };
++}
++
+ ReactDOM.createRoot(document.getElementById('root')).render(
+     <App />
+ ) 
+\ No newline at end of file
+diff --git a/src/pages/Connect.jsx b/src/pages/Connect.jsx
+index 57f6423..667e8b6 100644
+--- a/src/pages/Connect.jsx
++++ b/src/pages/Connect.jsx
+@@ -5,33 +5,65 @@ import { Mail, Send, Phone, Instagram, MapPin, Heart, Building2 } from 'lucide-r
+ import { Button } from '@/components/ui/button';
+ import { Input } from '@/components/ui/input';
+ import { Textarea } from '@/components/ui/textarea';
+-import { toast } from 'sonner';
+-import { base44 } from '@/api/base44Client';
++import { AnimatePresence, motion } from 'framer-motion';
++import { CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from '@/config/contact';
+ 
+ export default function Connect() {
+     const [formData, setFormData] = useState({
+         name: '',
+         email: '',
+         church: '',
+-        message: ''
++        message: '',
++        // Honeypot field (bots often fill hidden inputs)
++        website: ''
+     });
+     const [isSubmitting, setIsSubmitting] = useState(false);
++    const [notice, setNotice] = useState(null);
+ 
+     const handleSubmit = async (e) => {
+         e.preventDefault();
+         setIsSubmitting(true);
++        setNotice(null);
+         
+         try {
+-            await base44.integrations.Core.SendEmail({
+-                to: 'transformfreo@gmail.com',
+-                subject: `Contact Form: Message from ${formData.name}`,
+-                body: `Name: ${formData.name}\nEmail: ${formData.email}\nChurch: ${formData.church || 'Not provided'}\n\nMessage:\n${formData.message}`
++            if (import.meta.env.DEV) {
++                // Proves the handler is wired and will call the API.
++                console.log('[Connect] submit -> POST /api/send-email');
++            }
++
++            const res = await fetch('/api/send-email', {
++                method: 'POST',
++                headers: {
++                    'Content-Type': 'application/json'
++                },
++                body: JSON.stringify({
++                    name: formData.name,
++                    email: formData.email,
++                    church: formData.church,
++                    message: formData.message,
++                    website: formData.website
++                })
++            });
++
++            const data = await res.json().catch(() => ({}));
++            if (!res.ok || !data?.ok) {
++                throw new Error(data?.error || 'Failed to send message');
++            }
++
++            setNotice({
++                type: 'success',
++                message: 'Your email has been received! Check your inbox in the coming days for a reply.'
+             });
+-            
+-            toast.success('Thank you for reaching out! We\'ll be in touch soon.');
+-            setFormData({ name: '', email: '', church: '', message: '' });
++            setFormData({ name: '', email: '', church: '', message: '', website: '' });
+         } catch (error) {
+-            toast.error('Failed to send message. Please try again.');
++            if (import.meta.env.DEV) {
++                console.error('[Connect] send failed', error);
++            }
++
++            setNotice({
++                type: 'error',
++                message: `Your email was not sent. Please try again, or call/text ${CONTACT_PHONE_DISPLAY}.`
++            });
+         } finally {
+             setIsSubmitting(false);
+         }
+@@ -49,7 +81,8 @@ export default function Connect() {
+             icon: Phone,
+             title: 'Give Us a Call',
+             description: 'Please reach out to Liz Petersen',
+-            contact: 'Phone: 0404 077 194'
++            contact: `Phone: ${CONTACT_PHONE_DISPLAY}`,
++            tel: CONTACT_PHONE_TEL
+         },
+         {
+             icon: Instagram,
+@@ -81,7 +114,42 @@ export default function Connect() {
+                             </div>
+                         </div>
+ 
++                        <AnimatePresence initial={false}>
++                            {notice ? (
++                                <motion.div
++                                    key={notice.type}
++                                    initial={{ opacity: 0, y: -8 }}
++                                    animate={{ opacity: 1, y: 0 }}
++                                    exit={{ opacity: 0, y: -8 }}
++                                    transition={{ duration: 0.2 }}
++                                    role={notice.type === 'error' ? 'alert' : 'status'}
++                                    aria-live={notice.type === 'error' ? 'assertive' : 'polite'}
++                                    className={
++                                        notice.type === 'error'
++                                            ? 'mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900'
++                                            : 'mb-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900'
++                                    }
++                                >
++                                    {notice.message}
++                                </motion.div>
++                            ) : null}
++                        </AnimatePresence>
++
+                         <form onSubmit={handleSubmit} className="space-y-4">
++                            <div className="hidden">
++                                <label htmlFor="website" className="block text-sm font-medium text-slate-700 mb-2">
++                                    Website
++                                </label>
++                                <Input
++                                    id="website"
++                                    name="website"
++                                    type="text"
++                                    value={formData.website}
++                                    onChange={handleChange}
++                                    autoComplete="off"
++                                    tabIndex={-1}
++                                />
++                            </div>
+                             <div>
+                                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
+                                     Your Name *
+@@ -184,7 +252,16 @@ export default function Connect() {
+                                         <h4 className="text-lg font-bold text-[#1E3A5F] mb-2">{option.title}</h4>
+                                         <p className="text-slate-600 text-sm mb-3 leading-relaxed">{option.description}</p>
+                                         {option.contact && (
+-                                            <p className="text-sm text-[#7C6A9F] font-medium">{option.contact}</p>
++                                            option.tel ? (
++                                                <a
++                                                    href={`tel:${option.tel}`}
++                                                    className="text-sm text-[#7C6A9F] font-medium hover:underline"
++                                                >
++                                                    {option.contact}
++                                                </a>
++                                            ) : (
++                                                <p className="text-sm text-[#7C6A9F] font-medium">{option.contact}</p>
++                                            )
+                                         )}
+                                         {option.link && (
+                                             <a 
+diff --git a/vercel.json b/vercel.json
+new file mode 100644
+index 0000000..8e47bcb
+--- /dev/null
++++ b/vercel.json
+@@ -0,0 +1,6 @@
++{
++  "rewrites": [
++    { "source": "/api/(.*)", "destination": "/api/$1" },
++    { "source": "/(.*)", "destination": "/" }
++  ]
++}

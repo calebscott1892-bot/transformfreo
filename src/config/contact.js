@@ -1,0 +1,2 @@
+export const CONTACT_PHONE_DISPLAY = '0404 077 194';
+export const CONTACT_PHONE_TEL = '0404077194';

@@ -1,21 +1,35 @@
-// Import the correct public exports from the SDK to avoid rollup build errors
-import { base44 } from 'base44-to-supabase-sdk/src/api/base44Client.js';
-import { supabase } from 'base44-to-supabase-sdk/src/lib/supabase-client.js';
+// Base44 was partially migrated out of this project.
+// The Base44 SDK defaults to a local Supabase stack (e.g. 127.0.0.1:54321)
+// which must never be referenced by the production client bundle.
+//
+// This module remains only to avoid import-path breakage, but any usage should
+// be removed or replaced with app-owned backends (e.g. Vercel /api routes).
 
-// Re‑export the clients so other files can import them
-export { base44, supabase };
+const unsupported = (name) => {
+  throw new Error(
+    `${name} is not available: Base44/Supabase client has been removed from this app. ` +
+      'Use an app-owned API endpoint instead.'
+  );
+};
 
-// Auth helpers
-export const login = async (provider = 'dev', email, password) => {
-  if (provider === 'password') {
-    return supabase.auth.signInWithPassword({ email, password });
+export const base44 = new Proxy(
+  {},
+  {
+    get() {
+      return () => unsupported('base44');
+    }
   }
-  return base44.auth.login(provider);
-};
+);
 
-export const logout = async () => supabase.auth.signOut();
+export const supabase = new Proxy(
+  {},
+  {
+    get() {
+      return () => unsupported('supabase');
+    }
+  }
+);
 
-export const getSession = async () => {
-  const { data } = await supabase.auth.getSession();
-  return data.session ?? null;
-};
+export const login = async () => unsupported('login');
+export const logout = async () => unsupported('logout');
+export const getSession = async () => null;
