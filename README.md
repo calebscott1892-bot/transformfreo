@@ -34,14 +34,35 @@ Notes:
 
 ## Updating Resource PDFs
 
-The Resources page links to PDFs served from `public/resources/`:
+The Resources page links to PDFs served from `public/files/` (static Vite hosting).
 
-- `public/resources/confession-repentance-and-forgiveness-of-sin.pdf`
-- `public/resources/lessons-from-past-revivals.pdf`
-- `public/resources/orderly-worship-and-the-use-of-spiritual-gifts.pdf`
-- `public/resources/what-is-salvation-and-what-should-i-do-next.pdf`
+### Source of truth
 
-**Preferred workflow (no code change):** replace the four PDF files locally using the exact same filenames, then commit and redeploy.
+- Drop new PDFs into `public/files/`.
+- Do not hardcode PDF URLs in React components.
+- The site renders resources from a single generated manifest: `src/resources/resources.manifest.json`.
+
+### Automatic manifest + verification
+
+The build runs these steps automatically via `prebuild`:
+
+- `npm run resources:generate` (scans `public/files/**/*.pdf` and generates `src/resources/resources.manifest.json`)
+- `npm run resources:verify` (fails the build if links/manifest/files are inconsistent)
+
+You can run them manually:
+
+```bash
+npm run resources:generate
+npm run resources:verify
+```
+
+### Resource versioning / cache busting policy
+
+- Resource URLs are generated as `/files/<filename>.pdf?v=<hashprefix>`.
+- The `v=` value is derived from a content hash, so it changes whenever the PDF contents change.
+- This makes the URL immutable for caches (browser/CDN), even if you overwrite a file with the same filename.
+
+Recommendation (optional): consider adding a date suffix to filenames for human clarity, e.g. `my-resource-2026-01.pdf`.
 
 ## Building the app
 

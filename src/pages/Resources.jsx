@@ -2,39 +2,10 @@ import React from 'react';
 import Hero from '../components/Hero';
 import ContentSection from '../components/ContentSection';
 import { Download, FileText } from 'lucide-react';
+import { getResources } from '../resources/getResources';
 
 export default function Resources() {
-    const toSafePdfFilename = (title) => {
-        const base = String(title || 'resource')
-            .trim()
-            .replace(/[<>:"/\\|?*\x00-\x1F]/g, '')
-            .replace(/\s+/g, ' ');
-
-        return base.toLowerCase().endsWith('.pdf') ? base : `${base}.pdf`;
-    };
-
-    const resources = [
-        {
-            title: 'Confession, Repentance and Forgiveness of Sin',
-            url: '/resources/confession-repentance-and-forgiveness-of-sin.pdf',
-            edition: 'January 2026 Edition'
-        },
-        {
-            title: 'Lessons from Past Revivals',
-            url: '/resources/lessons-from-past-revivals.pdf',
-            edition: 'January 2026 Edition'
-        },
-        {
-            title: 'Orderly Worship & the Use of Spiritual Gifts',
-            url: '/resources/orderly-worship-and-the-use-of-spiritual-gifts.pdf',
-            edition: 'January 2026 Edition'
-        },
-        {
-            title: 'What is Salvation? And What Should I do Next?',
-            url: '/resources/what-is-salvation-and-what-should-i-do-next.pdf',
-            edition: 'January 2026 Edition'
-        }
-    ];
+    const resources = getResources();
 
     return (
         <div>
@@ -57,7 +28,7 @@ export default function Resources() {
                         <a
                             key={index}
                             href={resource.url}
-                            download={toSafePdfFilename(resource.title)}
+                            download={resource.filename}
                             className="group flex h-32 items-center gap-4 overflow-hidden p-6 bg-white rounded-xl shadow-md border-2 border-slate-200 hover:border-[#E8C468] hover:shadow-xl transition-all duration-300"
                         >
                             <div className="w-14 h-14 bg-gradient-to-br from-[#1E3A5F] to-[#7C6A9F] rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
@@ -65,9 +36,15 @@ export default function Resources() {
                             </div>
                             <div className="flex-1">
                                 <h3 className="line-clamp-2 text-lg font-semibold text-[#1E3A5F] group-hover:text-[#7C6A9F] transition-colors mb-1">
-                                    {resource.title}
+                                    {resource.displayName}
                                 </h3>
-                                <p className="text-sm text-slate-500">{resource.edition} • PDF Document</p>
+                                {resource.description ? (
+                                    <p className="text-sm text-slate-500">{resource.description}</p>
+                                ) : (
+                                    <p className="text-sm text-slate-500">
+                                        {resource.edition ? `${resource.edition} • ` : ''}PDF Document
+                                    </p>
+                                )}
                             </div>
                             <Download className="w-6 h-6 text-[#7C6A9F] group-hover:text-[#1E3A5F] transition-colors flex-shrink-0" strokeWidth={2} />
                         </a>

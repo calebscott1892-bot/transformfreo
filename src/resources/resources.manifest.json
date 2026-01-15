@@ -1,0 +1,86 @@
+{
+  "resourcesRoot": "public/files",
+  "resources": [
+    {
+      "filename": "confession-repentance-and-forgiveness-of-sin.pdf",
+      "relativePath": "confession-repentance-and-forgiveness-of-sin.pdf",
+      "path": "/files/confession-repentance-and-forgiveness-of-sin.pdf",
+      "sizeBytes": 419362,
+      "sha256": "d203844a117b2a3282f547b8d5127ac3937996d1cfa1a881c696bace17e869f8",
+      "lastModified": "2026-01-15T15:11:57.946Z",
+      "cacheBuster": "d203844a11",
+      "displayName": "Confession, Repentance and Forgiveness of Sin",
+      "edition": "January 2026 Edition",
+      "deprecated": false
+    },
+    {
+      "filename": "confession-repentance-and-forgiveness-of-sin.pdf.pdf",
+      "relativePath": "confession-repentance-and-forgiveness-of-sin.pdf.pdf",
+      "path": "/files/confession-repentance-and-forgiveness-of-sin.pdf.pdf",
+      "sizeBytes": 419362,
+      "sha256": "d203844a117b2a3282f547b8d5127ac3937996d1cfa1a881c696bace17e869f8",
+      "lastModified": "2026-01-15T15:11:38.746Z",
+      "cacheBuster": "d203844a11",
+      "displayName": "Confession Repentance And Forgiveness Of Sin",
+      "deprecated": true
+    },
+    {
+      "filename": "lessons-from-past-revivals.pdf",
+      "relativePath": "lessons-from-past-revivals.pdf",
+      "path": "/files/lessons-from-past-revivals.pdf",
+      "sizeBytes": 282682,
+      "sha256": "a07a5c8dd9b43633e10acc0bfa90393af8aef47cc6d01df5703a8958b61d1ae7",
+      "lastModified": "2026-01-15T15:11:57.949Z",
+      "cacheBuster": "a07a5c8dd9",
+      "displayName": "Lessons from Past Revivals",
+      "edition": "January 2026 Edition",
+      "deprecated": false
+    },
+    {
+      "filename": "lessons-from-past-revivals.pdf.pdf",
+      "relativePath": "lessons-from-past-revivals.pdf.pdf",
+      "path": "/files/lessons-from-past-revivals.pdf.pdf",
+      "sizeBytes": 282682,
+      "sha256": "a07a5c8dd9b43633e10acc0bfa90393af8aef47cc6d01df5703a8958b61d1ae7",
+      "lastModified": "2026-01-15T15:11:38.747Z",
+      "cacheBuster": "a07a5c8dd9",
+      "displayName": "Lessons From Past Revivals",
+      "deprecated": true
+    },
+    {
+      "filename": "orderly-worship-and-the-use-of-spiritual-gifts.pdf",
+      "relativePath": "orderly-worship-and-the-use-of-spiritual-gifts.pdf",
+      "path": "/files/orderly-worship-and-the-use-of-spiritual-gifts.pdf",
+      "sizeBytes": 295863,
+      "sha256": "82325bc861ab61fea5fb389afc39476a1056d882908bb2dff06889b8a875c48a",
+      "lastModified": "2026-01-15T15:11:57.952Z",
+      "cacheBuster": "82325bc861",
+      "displayName": "Orderly Worship & the Use of Spiritual Gifts",
+      "edition": "January 2026 Edition",
+      "deprecated": false
+    },
+    {
+      "filename": "orderly-worship-and-the-use-of-spiritual-gifts.pdf.pdf",
+      "relativePath": "orderly-worship-and-the-use-of-spiritual-gifts.pdf.pdf",
+      "path": "/files/orderly-worship-and-the-use-of-spiritual-gifts.pdf.pdf",
+      "sizeBytes": 295863,
+      "sha256": "82325bc861ab61fea5fb389afc39476a1056d882908bb2dff06889b8a875c48a",
+      "lastModified": "2026-01-15T15:11:38.747Z",
+      "cacheBuster": "82325bc861",
+      "displayName": "Orderly Worship And The Use Of Spiritual Gifts",
+      "deprecated": true
+    },
+    {
+      "filename": "what-is-salvation-and-what-should-i-do-next.pdf",
+      "relativePath": "what-is-salvation-and-what-should-i-do-next.pdf",
+      "path": "/files/what-is-salvation-and-what-should-i-do-next.pdf",
+      "sizeBytes": 421073,
+      "sha256": "019c2b95586284249c226405bfa336a726553c5cfe5a3a4b473e930552d4b696",
+      "lastModified": "2026-01-15T15:11:38.748Z",
+      "cacheBuster": "019c2b9558",
+      "displayName": "What is Salvation? And What Should I do Next?",
+      "edition": "January 2026 Edition",
+      "deprecated": false
+    }
+  ]
+}

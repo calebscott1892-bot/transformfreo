@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "resources:generate": "node scripts/generate-resources-manifest.mjs",
+    "resources:verify": "node scripts/verify-resources.mjs",
+    "prebuild": "npm run resources:generate && npm run resources:verify",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
