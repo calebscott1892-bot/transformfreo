@@ -15,7 +15,7 @@ export default function AboutUs() {
         {
             day: 'Wednesdays',
             time: '7:00–8:00pm',
-            note: '* Youth & young adults focused (all are welcome).',
+            note: '* Youth & young adults focused (but all are welcome).',
             location: 'St John\'s Anglican Church',
             address: '24 Adelaide Street, Fremantle WA 6160'
         },
