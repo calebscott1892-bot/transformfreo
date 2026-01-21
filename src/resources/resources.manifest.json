@@ -2,6 +2,17 @@
   "resourcesRoot": "public/files",
   "resources": [
     {
+      "filename": "a-biblical-guide-to-resolving-personal-conflict.pdf",
+      "relativePath": "a-biblical-guide-to-resolving-personal-conflict.pdf",
+      "path": "/files/a-biblical-guide-to-resolving-personal-conflict.pdf",
+      "sizeBytes": 361448,
+      "sha256": "bb4e4a17b1085aa4aa4adccee31bc583cc6b7781901bc550feab92d8b3936dd0",
+      "lastModified": "2026-01-21T09:28:26.186Z",
+      "cacheBuster": "bb4e4a17b1",
+      "displayName": "A Biblical Guide to Resolving Personal Conflict",
+      "deprecated": false
+    },
+    {
       "filename": "confession-repentance-and-forgiveness-of-sin.pdf",
       "relativePath": "confession-repentance-and-forgiveness-of-sin.pdf",
       "path": "/files/confession-repentance-and-forgiveness-of-sin.pdf",
