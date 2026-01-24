@@ -7,7 +7,7 @@
       "path": "/files/a-biblical-guide-to-resolving-personal-conflict.pdf",
       "sizeBytes": 361448,
       "sha256": "bb4e4a17b1085aa4aa4adccee31bc583cc6b7781901bc550feab92d8b3936dd0",
-      "lastModified": "2026-01-23T21:46:08+08:00",
+      "lastModified": "2026-01-24T15:24:43+08:00",
       "cacheBuster": "bb4e4a17b1",
       "displayName": "A Biblical Guide to Resolving Personal Conflict",
       "deprecated": false
@@ -16,10 +16,10 @@
       "filename": "confession-repentance-and-forgiveness-of-sin.pdf",
       "relativePath": "confession-repentance-and-forgiveness-of-sin.pdf",
       "path": "/files/confession-repentance-and-forgiveness-of-sin.pdf",
-      "sizeBytes": 420129,
-      "sha256": "c5f1054564b5e588da6c54572ba96ed6ad58d422e3898a1217bd67347debdea4",
+      "sizeBytes": 420165,
+      "sha256": "3dc04ea81fc85d0b6396ba77a649d88457ffe7434241104dcbf607e8f3b696e6",
       "lastModified": "2026-01-16T16:56:23+08:00",
-      "cacheBuster": "c5f1054564",
+      "cacheBuster": "3dc04ea81f",
       "displayName": "Confession, Repentance and Forgiveness of Sin",
       "edition": "January 2026 Edition",
       "deprecated": false
