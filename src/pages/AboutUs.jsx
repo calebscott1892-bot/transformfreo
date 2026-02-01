@@ -63,14 +63,6 @@ export default function AboutUs() {
                     </p>
                 </div>
 
-                <div className="max-w-4xl mx-auto mb-4">
-                    <div className="bg-white rounded-xl px-4 py-3 shadow-sm border border-slate-200 border-l-4 border-l-[#E8C468] motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-top-2 motion-safe:duration-500 motion-reduce:animate-none">
-                        <p className="text-sm md:text-[0.95rem] text-slate-700 leading-relaxed">
-                            We are pausing Transform Fremantle prayer groups from 19–31 Jan. Meetings will recommence on 2 Feb.
-                        </p>
-                    </div>
-                </div>
-
                 <div className="space-y-4 max-w-4xl mx-auto">
                     {prayerMeetings.map((meeting, index) => (
                         <div 

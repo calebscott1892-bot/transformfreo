@@ -42,7 +42,7 @@ export default function Resources() {
                                     <p className="text-sm text-slate-500">{resource.description}</p>
                                 ) : (
                                     <p className="text-sm text-slate-500">
-                                        {resource.edition ? `${resource.edition} • ` : ''}PDF Document
+                                        PDF Document
                                     </p>
                                 )}
                             </div>
