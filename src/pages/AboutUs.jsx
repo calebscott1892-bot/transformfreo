@@ -13,6 +13,13 @@ export default function AboutUs() {
         },
 
         {
+            day: 'Tuesdays',
+            time: '7:00–8:00pm',
+            location: 'Fremantle Church',
+            address: '217 High St, Fremantle WA 6160'
+        },
+
+        {
             day: 'Wednesdays',
             time: '7:00–8:00pm',
             note: '* Youth & young adults focused (but all ages are welcome).',
