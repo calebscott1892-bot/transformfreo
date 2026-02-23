@@ -28,8 +28,9 @@ export default function AboutUs() {
         },
         {
             day: 'Thursdays',
-            time: 'Coming Soon',
-            comingSoon: true
+            time: '9:30am',
+            location: 'St Patrick\'s Basilica',
+            address: '47 Adelaide Street, Fremantle WA 6160'
         },
         {
             day: 'Fridays',
