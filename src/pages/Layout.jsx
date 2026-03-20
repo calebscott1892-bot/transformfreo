@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils/utils.js';
 import { Menu, X } from 'lucide-react';
+import C4FooterCredit from '@/components/c4-footer-credit/C4FooterCredit';
 
 export default function Layout({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -137,8 +138,12 @@ export default function Layout({ children, currentPageName }) {
                             </p>
                         </div>
                     </div>
-                    <div className="pt-8 border-t border-slate-700 text-center text-sm text-slate-400">
+                    <div className="pt-8 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
                         <p>© {new Date().getFullYear()} Transform Fremantle. All rights reserved.</p>
+                        <C4FooterCredit
+                            size="small"
+                            colorScheme="dark"
+                        />
                     </div>
                 </div>
             </footer>
