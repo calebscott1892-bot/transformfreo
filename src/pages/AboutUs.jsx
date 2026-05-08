@@ -14,6 +14,12 @@ export default function AboutUs() {
 
         {
             day: 'Tuesdays',
+            time: '12:30pm–2:00pm',
+            location: 'Victory Family Church Freo',
+            address: 'Upstairs in the E-shed markets, Peter Hughes Drive, Fremantle WA 6160'
+        },
+        {
+            day: 'Tuesdays',
             time: '7:00–8:00pm',
             location: 'Fremantle Church',
             address: '217 High St, Fremantle WA 6160'
