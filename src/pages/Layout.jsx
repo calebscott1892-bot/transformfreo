@@ -141,6 +141,7 @@ export default function Layout({ children, currentPageName }) {
                     <div className="pt-8 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
                         <p>© {new Date().getFullYear()} Transform Fremantle. All rights reserved.</p>
                         <C4FooterCredit
+                            href="https://c4studios.com.au"
                             size="small"
                             colorScheme="dark"
                         />
