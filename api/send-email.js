@@ -20,12 +20,44 @@ function getClientIp(req) {
   return 'unknown';
 }
 
+// Throwaway / 10-minute inbox providers that show up in real form spam.
+const DISPOSABLE_EMAIL_DOMAINS = new Set([
+  'mailinator.com', 'guerrillamail.com', 'guerrillamailblock.com', 'sharklasers.com',
+  'grr.la', '10minutemail.com', '10minutemail.net', 'temp-mail.org', 'temp-mail.io',
+  'tempmail.com', 'tempmail.net', 'throwawaymail.com', 'yopmail.com', 'trashmail.com',
+  'getnada.com', 'nada.email', 'maildrop.cc', 'mailnesia.com', 'mintemail.com',
+  'dispostable.com', 'fakeinbox.com', 'spamgourmet.com', 'mailcatch.com', 'tempinbox.com',
+  'emailondeck.com', 'mohmal.com', 'mytemp.email', 'moakt.com', 'tempr.email',
+  'discard.email', 'spam4.me', '33mail.com', 'burnermail.io', '1secmail.com',
+  'mailsac.com', 'inboxkitten.com',
+]);
+
+// RFC 2606 / 6761 reserved domains + TLDs — never a real mailbox.
+const RESERVED_EMAIL_DOMAINS = new Set(['example.com', 'example.org', 'example.net']);
+const RESERVED_TLDS = new Set(['test', 'example', 'invalid', 'localhost', 'local']);
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+
 function isValidEmail(email) {
   if (typeof email !== 'string') return false;
-  const trimmed = email.trim();
-  if (trimmed.length < 3 || trimmed.length > 254) return false;
-  // Simple RFC5322-ish check (good enough for server-side validation)
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+  const trimmed = email.trim().toLowerCase();
+  if (trimmed.length < 6 || trimmed.length > 254) return false;
+  if (trimmed.includes('..')) return false;
+  if (!EMAIL_REGEX.test(trimmed)) return false;
+
+  const atIndex = trimmed.lastIndexOf('@');
+  const local = trimmed.slice(0, atIndex);
+  const domain = trimmed.slice(atIndex + 1);
+  if (local.length > 64) return false;
+
+  const labels = domain.split('.');
+  const tld = labels[labels.length - 1];
+  if (tld.length < 2 || !/^[a-z]+$/.test(tld)) return false;
+  if (RESERVED_TLDS.has(tld) || RESERVED_EMAIL_DOMAINS.has(domain)) return false;
+  if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) return false;
+
+  return true;
 }
 
 function takeRateLimitToken(ip) {
