@@ -5,51 +5,7 @@ import { MapPin, Clock, Calendar } from 'lucide-react';
 import content from '@/content/about.json';
 
 export default function AboutUs() {
-<<<<<<< HEAD
     const prayerMeetings = content.meetings || [];
-=======
-    const prayerMeetings = [
-        {
-            day: 'Mondays',
-            time: '7:30–8:30pm',
-            location: 'Scots Presbyterian Church',
-            address: '90 South Terrace, Fremantle WA 6160'
-        },
-
-        {
-            day: 'Tuesdays',
-            time: '12:30pm–2:00pm',
-            location: 'Victory Family Church Freo',
-            address: 'Upstairs in the E-shed markets, Peter Hughes Drive, Fremantle WA 6160'
-        },
-        {
-            day: 'Tuesdays',
-            time: '7:00–8:00pm',
-            location: 'Fremantle Church',
-            address: '217 High St, Fremantle WA 6160'
-        },
-
-        {
-            day: 'Wednesdays',
-            time: '7:00–8:00pm',
-            note: '* Youth & young adults focused (but all ages are welcome).',
-            location: 'St John\'s Anglican Church',
-            address: '24 Adelaide Street, Fremantle WA 6160'
-        },
-        {
-            day: 'Thursdays',
-            time: '9:30am',
-            location: 'St Patrick\'s Basilica',
-            address: '47 Adelaide Street, Fremantle WA 6160'
-        },
-        {
-            day: 'Fridays',
-            time: '10:00–11:00am',
-            location: 'Fremantle Wesley Uniting Church',
-            address: '4 Cantonment Street, Fremantle WA 6160'
-        }
-    ];
->>>>>>> origin/main
 
     return (
         <div>
