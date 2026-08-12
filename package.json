@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "npm run cms:sync",
     "dev": "vite",
+    "cms:sync": "node scripts/sync-cms.mjs",
     "resources:generate": "node scripts/generate-resources-manifest.mjs",
     "resources:verify": "node scripts/verify-resources.mjs",
-    "prebuild": "npm run resources:generate && npm run resources:verify",
+    "prebuild": "npm run cms:sync && npm run resources:generate && npm run resources:verify",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -67,6 +69,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@sveltia/cms": "0.187.0",
     "@flydotio/dockerfile": "^0.7.8",
     "@types/node": "^22.13.5",
     "@types/react": "^18.2.66",

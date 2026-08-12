@@ -1,0 +1,65 @@
+{
+  "hero": {
+    "title": "Connect With Us",
+    "subtitle": "Join us in praying for and serving Fremantle",
+    "image": "/images/hero-connect.jpg"
+  },
+  "phone": {
+    "display": "0404 077 194",
+    "tel": "0404077194"
+  },
+  "form": {
+    "heading": "Get In Touch",
+    "subheading": "We'd love to hear from you",
+    "nameLabel": "Your Name *",
+    "namePlaceholder": "John Smith",
+    "emailLabel": "Email Address *",
+    "emailPlaceholder": "john@example.com",
+    "churchLabel": "Your Church (Optional)",
+    "churchPlaceholder": "Grace Community Church",
+    "messageLabel": "Your Message *",
+    "messagePlaceholder": "Tell us how you'd like to connect or what questions you have...",
+    "buttonLabel": "Send Message",
+    "buttonSendingLabel": "Sending...",
+    "successMessage": "Your email has been received! Check your inbox in the coming days for a reply."
+  },
+  "waysToConnect": {
+    "heading": "Ways to Connect",
+    "text": "Get in touch with us or follow our journey on social media."
+  },
+  "options": [
+    {
+      "icon": "phone",
+      "title": "Give Us a Call",
+      "description": "Please reach out to Liz Petersen",
+      "usePhone": true,
+      "link": "",
+      "linkLabel": ""
+    },
+    {
+      "icon": "instagram",
+      "title": "Find Us on Instagram",
+      "description": "Follow us on Instagram for updates",
+      "usePhone": false,
+      "link": "https://www.instagram.com/transformfreo?igsh=NXRveXByYm9jMHAy&utm_source=qr",
+      "linkLabel": "Follow @transformfreo"
+    }
+  ],
+  "giving": {
+    "heading": "Support Our Mission",
+    "text": "We believe in giving out of conviction and not out of compulsion. If you feel convicted to give to us, thank you!",
+    "detailsHeading": "Bank Transfer Details",
+    "detailsText": "You can support Transform Fremantle through a direct bank transfer:",
+    "accountName": "Transform Fremantle",
+    "bsb": "116879",
+    "accountNumber": "454199464"
+  },
+  "location": {
+    "heading": "Based in Fremantle, WA",
+    "text": "We're a local movement serving the City of Fremantle and surrounding areas. Our prayer gatherings take place at various locations across the city."
+  },
+  "closing": {
+    "heading": "Join the Movement",
+    "text": "We believe God is calling His people to unite in prayer for Fremantle. No matter your church background or where you're at in your faith journey, you're welcome to join us."
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "hero": {
+    "title": "Transform Fremantle",
+    "subtitle": "United in prayer for the transformation of our city",
+    "image": "/images/hero-home.jpg"
+  },
+  "intro": {
+    "paragraphs": [
+      "We are a group of Christians from various churches, united in prayer for the transformation of the City of Fremantle.",
+      "Our vision is for Fremantle to be a peaceful city where multitudes encounter Jesus, transform their lives, and go on to serve Christ."
+    ]
+  },
+  "meetingsSection": {
+    "heading": "Prayer Meetings",
+    "intro": "We warmly invite all Christians to join us at the Transform Fremantle prayer meetings held throughout the week."
+  },
+  "meetings": [
+    {
+      "day": "Mondays",
+      "time": "7:30–8:30pm",
+      "location": "Scots Presbyterian Church",
+      "address": "90 South Terrace, Fremantle WA 6160",
+      "note": "",
+      "comingSoon": false
+    },
+    {
+      "day": "Tuesdays",
+      "time": "12:30pm–2:00pm",
+      "location": "Victory Family Church Freo",
+      "address": "Upstairs in the E-shed markets, Peter Hughes Drive, Fremantle WA 6160",
+      "note": "",
+      "comingSoon": false
+    },
+    {
+      "day": "Tuesdays",
+      "time": "7:00–8:00pm",
+      "location": "Fremantle Church",
+      "address": "217 High St, Fremantle WA 6160",
+      "note": "",
+      "comingSoon": false
+    },
+    {
+      "day": "Wednesdays",
+      "time": "7:00–8:00pm",
+      "location": "St John's Anglican Church",
+      "address": "24 Adelaide Street, Fremantle WA 6160",
+      "note": "* Youth & young adults focused (but all ages are welcome).",
+      "comingSoon": false
+    },
+    {
+      "day": "Thursdays",
+      "time": "9:30am",
+      "location": "St Patrick's Basilica",
+      "address": "47 Adelaide Street, Fremantle WA 6160",
+      "note": "",
+      "comingSoon": false
+    },
+    {
+      "day": "Fridays",
+      "time": "10:00–11:00am",
+      "location": "Fremantle Wesley Uniting Church",
+      "address": "4 Cantonment Street, Fremantle WA 6160",
+      "note": "",
+      "comingSoon": false
+    }
+  ],
+  "unity": {
+    "heading": "Unity in Essentials",
+    "quote": "\"In essentials, unity; in non-essentials, liberty; in all things, charity.\"",
+    "body": "We recognize that Christians may differ on secondary matters of theology and practice. What unites us is far greater than what divides us - our common faith in Jesus Christ and our shared mission to see His kingdom come in Fremantle."
+  }
+}

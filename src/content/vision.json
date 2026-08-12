@@ -1,0 +1,45 @@
+{
+  "hero": {
+    "title": "Vision & Aim",
+    "subtitle": "What we're believing God for in Fremantle",
+    "image": "/images/hero-vision.jpg"
+  },
+  "vision": {
+    "heading": "Our Vision",
+    "text": "Our vision is for Fremantle to be a peaceful city where multitudes encounter Jesus, transform their lives, and go on to serve Christ."
+  },
+  "aimsSection": {
+    "heading": "Our Aims",
+    "intro": "Four distinct expressions of what we're praying and believing God for in Fremantle:"
+  },
+  "aims": [
+    {
+      "number": "01",
+      "icon": "crown",
+      "title": "Jesus as King",
+      "description": "That Jesus be welcomed as King of Fremantle."
+    },
+    {
+      "number": "02",
+      "icon": "church",
+      "title": "Thriving Churches",
+      "description": "That the churches in Fremantle thrive, are filled to overflowing with worshipping believers, and that new places of worship are needed to accommodate church growth."
+    },
+    {
+      "number": "03",
+      "icon": "home",
+      "title": "Christ-Centred Lives",
+      "description": "That believers in Fremantle transform their homes and workplaces to be Christ-centred."
+    },
+    {
+      "number": "04",
+      "icon": "lightbulb",
+      "title": "Lights in Darkness",
+      "description": "That the churches in Fremantle will be lights in a dark place—bringing peace, a reduction in anti-social behaviour, prosperity in business, and a reduction in the presence of false religions and the occult."
+    }
+  ],
+  "closing": {
+    "heading": "Praying with Purpose",
+    "text": "These four aims guide our prayers and shape our intercession for Fremantle. We believe God will move powerfully as we unite in faith, asking boldly for His kingdom to come in our city."
+  }
+}

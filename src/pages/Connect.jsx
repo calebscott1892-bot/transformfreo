@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import ContentSection from '../components/ContentSection';
-import { Mail, Send, Phone, Instagram, MapPin, Heart, Building2 } from 'lucide-react';
+import { Mail, Send, MapPin, Heart, Building2, Instagram } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CONTACT_PHONE_DISPLAY, CONTACT_PHONE_TEL } from '@/config/contact';
+import { getIcon } from '@/content/icons';
+import content from '@/content/connect.json';
 
 export default function Connect() {
+    const phoneDisplay = content.phone?.display || '';
+    const phoneTel = content.phone?.tel || '';
+    const form = content.form || {};
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -24,7 +29,7 @@ export default function Connect() {
         e.preventDefault();
         setIsSubmitting(true);
         setNotice(null);
-        
+
         try {
             if (import.meta.env.DEV) {
                 // Proves the handler is wired and will call the API.
@@ -52,7 +57,7 @@ export default function Connect() {
 
             setNotice({
                 type: 'success',
-                message: 'Your email has been received! Check your inbox in the coming days for a reply.'
+                message: form.successMessage
             });
             setFormData({ name: '', email: '', church: '', message: '', website: '' });
         } catch (error) {
@@ -62,7 +67,7 @@ export default function Connect() {
 
             setNotice({
                 type: 'error',
-                message: `Your email was not sent. Please try again, or call/text ${CONTACT_PHONE_DISPLAY}.`
+                message: `Your email was not sent. Please try again, or call/text ${phoneDisplay}.`
             });
         } finally {
             setIsSubmitting(false);
@@ -76,28 +81,14 @@ export default function Connect() {
         });
     };
 
-    const connectOptions = [
-        {
-            icon: Phone,
-            title: 'Give Us a Call',
-            description: 'Please reach out to Liz Petersen',
-            contact: `Phone: ${CONTACT_PHONE_DISPLAY}`,
-            tel: CONTACT_PHONE_TEL
-        },
-        {
-            icon: Instagram,
-            title: 'Find Us on Instagram',
-            description: 'Follow us on Instagram for updates',
-            link: 'https://www.instagram.com/transformfreo?igsh=NXRveXByYm9jMHAy&utm_source=qr'
-        }
-    ];
+    const connectOptions = content.options || [];
 
     return (
         <div>
-            <Hero 
-                title="Connect With Us"
-                subtitle="Join us in praying for and serving Fremantle"
-                backgroundImage="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/c56eed31b_The_Love_Fremantle_sign.jpg"
+            <Hero
+                title={content.hero?.title}
+                subtitle={content.hero?.subtitle}
+                backgroundImage={content.hero?.image}
             />
 
             <ContentSection>
@@ -109,8 +100,8 @@ export default function Connect() {
                                 <Mail className="w-6 h-6 text-white" strokeWidth={2} />
                             </div>
                             <div>
-                                <h2 className="text-2xl font-bold text-[#1E3A5F]">Get In Touch</h2>
-                                <p className="text-sm text-slate-600">We'd love to hear from you</p>
+                                <h2 className="text-2xl font-bold text-[#1E3A5F]">{form.heading}</h2>
+                                <p className="text-sm text-slate-600">{form.subheading}</p>
                             </div>
                         </div>
 
@@ -152,7 +143,7 @@ export default function Connect() {
                             </div>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium text-slate-700 mb-2">
-                                    Your Name *
+                                    {form.nameLabel}
                                 </label>
                                 <Input
                                     id="name"
@@ -161,14 +152,14 @@ export default function Connect() {
                                     required
                                     value={formData.name}
                                     onChange={handleChange}
-                                    placeholder="John Smith"
+                                    placeholder={form.namePlaceholder}
                                     className="w-full"
                                 />
                             </div>
 
                             <div>
                                 <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
-                                    Email Address *
+                                    {form.emailLabel}
                                 </label>
                                 <Input
                                     id="email"
@@ -177,14 +168,14 @@ export default function Connect() {
                                     required
                                     value={formData.email}
                                     onChange={handleChange}
-                                    placeholder="john@example.com"
+                                    placeholder={form.emailPlaceholder}
                                     className="w-full"
                                 />
                             </div>
 
                             <div>
                                 <label htmlFor="church" className="block text-sm font-medium text-slate-700 mb-2">
-                                    Your Church (Optional)
+                                    {form.churchLabel}
                                 </label>
                                 <Input
                                     id="church"
@@ -192,14 +183,14 @@ export default function Connect() {
                                     type="text"
                                     value={formData.church}
                                     onChange={handleChange}
-                                    placeholder="Grace Community Church"
+                                    placeholder={form.churchPlaceholder}
                                     className="w-full"
                                 />
                             </div>
 
                             <div>
                                 <label htmlFor="message" className="block text-sm font-medium text-slate-700 mb-2">
-                                    Your Message *
+                                    {form.messageLabel}
                                 </label>
                                 <Textarea
                                     id="message"
@@ -207,23 +198,23 @@ export default function Connect() {
                                     required
                                     value={formData.message}
                                     onChange={handleChange}
-                                    placeholder="Tell us how you'd like to connect or what questions you have..."
+                                    placeholder={form.messagePlaceholder}
                                     rows={5}
                                     className="w-full"
                                 />
                             </div>
 
-                            <Button 
-                                type="submit" 
+                            <Button
+                                type="submit"
                                 disabled={isSubmitting}
                                 className="w-full bg-[#1E3A5F] hover:bg-[#2A4A6F] text-white font-medium py-6"
                             >
                                 {isSubmitting ? (
-                                    'Sending...'
+                                    form.buttonSendingLabel
                                 ) : (
                                     <>
                                         <Send className="w-4 h-4 mr-2" />
-                                        Send Message
+                                        {form.buttonLabel}
                                     </>
                                 )}
                             </Button>
@@ -233,51 +224,51 @@ export default function Connect() {
                     {/* Connection Options */}
                     <div className="space-y-6">
                         <div className="bg-gradient-to-br from-[#1E3A5F] to-[#2A4A6F] rounded-2xl p-8 text-white shadow-lg">
-                            <h3 className="text-2xl font-bold mb-3">Ways to Connect</h3>
+                            <h3 className="text-2xl font-bold mb-3">{content.waysToConnect?.heading}</h3>
                             <p className="text-slate-200 leading-relaxed">
-                                Get in touch with us or follow our journey on social media.
+                                {content.waysToConnect?.text}
                             </p>
                         </div>
 
-                        {connectOptions.map((option, index) => (
-                            <div 
-                                key={index}
-                                className="bg-white rounded-xl p-6 shadow-md border border-slate-200 hover:shadow-lg transition-all duration-300"
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-[#E8C468] to-[#D4AF37] rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <option.icon className="w-6 h-6 text-[#1E3A5F]" strokeWidth={2} />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h4 className="text-lg font-bold text-[#1E3A5F] mb-2">{option.title}</h4>
-                                        <p className="text-slate-600 text-sm mb-3 leading-relaxed">{option.description}</p>
-                                        {option.contact && (
-                                            option.tel ? (
+                        {connectOptions.map((option, index) => {
+                            const OptionIcon = getIcon(option.icon, Mail);
+
+                            return (
+                                <div
+                                    key={index}
+                                    className="bg-white rounded-xl p-6 shadow-md border border-slate-200 hover:shadow-lg transition-all duration-300"
+                                >
+                                    <div className="flex items-start gap-4">
+                                        <div className="w-12 h-12 bg-gradient-to-br from-[#E8C468] to-[#D4AF37] rounded-xl flex items-center justify-center flex-shrink-0">
+                                            <OptionIcon className="w-6 h-6 text-[#1E3A5F]" strokeWidth={2} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="text-lg font-bold text-[#1E3A5F] mb-2">{option.title}</h4>
+                                            <p className="text-slate-600 text-sm mb-3 leading-relaxed">{option.description}</p>
+                                            {option.usePhone && phoneDisplay && (
                                                 <a
-                                                    href={`tel:${option.tel}`}
+                                                    href={`tel:${phoneTel}`}
                                                     className="text-sm text-[#7C6A9F] font-medium hover:underline"
                                                 >
-                                                    {option.contact}
+                                                    Phone: {phoneDisplay}
                                                 </a>
-                                            ) : (
-                                                <p className="text-sm text-[#7C6A9F] font-medium">{option.contact}</p>
-                                            )
-                                        )}
-                                        {option.link && (
-                                            <a 
-                                                href={option.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg"
-                                            >
-                                                <Instagram className="w-5 h-5" strokeWidth={2} />
-                                                Follow @transformfreo
-                                            </a>
-                                        )}
+                                            )}
+                                            {option.link && (
+                                                <a
+                                                    href={option.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 mt-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg"
+                                                >
+                                                    <Instagram className="w-5 h-5" strokeWidth={2} />
+                                                    {option.linkLabel}
+                                                </a>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </ContentSection>
@@ -288,9 +279,9 @@ export default function Connect() {
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#1E3A5F] to-[#7C6A9F] rounded-2xl mb-4">
                             <Heart className="w-8 h-8 text-white" strokeWidth={2} />
                         </div>
-                        <h2 className="text-3xl font-bold text-[#1E3A5F] mb-3">Support Our Mission</h2>
+                        <h2 className="text-3xl font-bold text-[#1E3A5F] mb-3">{content.giving?.heading}</h2>
                         <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed mb-6">
-                            We believe in giving out of conviction and not out of compulsion. If you feel convicted to give to us, thank you!
+                            {content.giving?.text}
                         </p>
                     </div>
 
@@ -298,22 +289,22 @@ export default function Connect() {
                         <div className="flex items-start gap-4">
                             <Building2 className="w-6 h-6 text-[#7C6A9F] mt-1 flex-shrink-0" strokeWidth={2} />
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">Bank Transfer Details</h3>
+                                <h3 className="text-xl font-bold text-[#1E3A5F] mb-2">{content.giving?.detailsHeading}</h3>
                                 <p className="text-slate-600 mb-4">
-                                    You can support Transform Fremantle through a direct bank transfer:
+                                    {content.giving?.detailsText}
                                 </p>
                                 <div className="space-y-2 text-slate-700">
                                     <div className="flex flex-col sm:flex-row sm:gap-2">
                                         <span className="font-semibold min-w-32">Account Name:</span>
-                                        <span>Transform Fremantle</span>
+                                        <span>{content.giving?.accountName}</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:gap-2">
                                         <span className="font-semibold min-w-32">BSB:</span>
-                                        <span>116879</span>
+                                        <span>{content.giving?.bsb}</span>
                                     </div>
                                     <div className="flex flex-col sm:flex-row sm:gap-2">
                                         <span className="font-semibold min-w-32">Account Number:</span>
-                                        <span>454199464</span>
+                                        <span>{content.giving?.accountNumber}</span>
                                     </div>
                                 </div>
                             </div>
@@ -329,10 +320,9 @@ export default function Connect() {
                             <MapPin className="w-8 h-8 text-white" strokeWidth={2} />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-2xl font-bold text-[#1E3A5F] mb-2">Based in Fremantle, WA</h3>
+                            <h3 className="text-2xl font-bold text-[#1E3A5F] mb-2">{content.location?.heading}</h3>
                             <p className="text-slate-600 leading-relaxed">
-                                We're a local movement serving the City of Fremantle and surrounding areas. 
-                                Our prayer gatherings take place at various locations across the city.
+                                {content.location?.text}
                             </p>
                         </div>
                     </div>
@@ -341,10 +331,9 @@ export default function Connect() {
 
             <ContentSection className="py-12">
                 <div className="bg-gradient-to-br from-[#7C6A9F] to-[#1E3A5F] rounded-2xl p-8 md:p-12 text-white text-center shadow-2xl">
-                    <h3 className="text-2xl font-bold mb-4">Join the Movement</h3>
+                    <h3 className="text-2xl font-bold mb-4">{content.closing?.heading}</h3>
                     <p className="text-lg text-slate-200 mb-6 max-w-2xl mx-auto leading-relaxed">
-                        We believe God is calling His people to unite in prayer for Fremantle. No matter your 
-                        church background or where you're at in your faith journey, you're welcome to join us.
+                        {content.closing?.text}
                     </p>
                     <div className="inline-block">
                         <div className="h-1 w-24 bg-[#E8C468] rounded-full"></div>

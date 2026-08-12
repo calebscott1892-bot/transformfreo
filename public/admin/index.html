@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Transform Fremantle — Website Editor</title>
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
+    <style>
+      /* Shown only until the editor finishes loading, then replaced. */
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        background: #1e3a5f;
+        color: #e8c468;
+        font: 500 0.95rem/1.5 ui-sans-serif, system-ui, sans-serif;
+        text-align: center;
+        padding: 1.5rem;
+      }
+      #boot img {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+      }
+      #boot p {
+        margin: 0;
+        color: #cbd5e1;
+      }
+      #boot .slow {
+        display: none;
+        max-width: 32rem;
+        color: #94a3b8;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="boot">
+      <img src="/images/logo.png" alt="" />
+      <p>Loading the website editor&hellip;</p>
+      <p class="slow" id="boot-slow">
+        Still loading. If this message stays on screen, refresh the page. If it
+        keeps happening, the editor may need attention — see HANDOVER.md in the
+        website's code repository.
+      </p>
+    </div>
+
+    <script>
+      // The editor takes over the page once it loads. If it hasn't after ten
+      // seconds, tell the user something useful instead of leaving them staring.
+      setTimeout(function () {
+        var slow = document.getElementById('boot-slow');
+        if (slow) slow.style.display = 'block';
+      }, 10000);
+    </script>
+
+    <script src="/admin/sveltia-cms.js"></script>
+  </body>
+</html>

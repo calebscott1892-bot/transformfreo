@@ -1,0 +1,18 @@
+{
+  "name": "Transform Fremantle",
+  "tagline": "United in Prayer",
+  "logo": "/images/logo.png",
+  "nav": {
+    "AboutUs": "About Us",
+    "StatementOfFaith": "Statement of Faith",
+    "VisionAndAim": "Vision & Aim",
+    "Resources": "Resources",
+    "Connect": "Connect"
+  },
+  "footer": {
+    "blurb": "A group of Christians united in prayer for the transformation of the City of Fremantle.",
+    "quickLinksHeading": "Quick Links",
+    "visionHeading": "Our Vision",
+    "visionText": "For Fremantle to be a peaceful city where many encounter Jesus, experience real life change, and go on to serve Christ."
+  }
+}
