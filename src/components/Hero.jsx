@@ -1,14 +1,15 @@
 import React from 'react';
 
+const DEFAULT_BG = '/images/hero-home.jpg';
+
 export default function Hero({ title, subtitle, backgroundImage }) {
-    const defaultBg = 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/12ab46804_fbh-pano-1500x630.jpg';
-    const bgImage = backgroundImage || defaultBg;
-    
+    const bgImage = backgroundImage || DEFAULT_BG;
+
     return (
         <div className="relative bg-[#1E3A5F] text-white overflow-hidden">
             <div className={`absolute inset-0 bg-cover bg-[50%_35%]`} style={{ backgroundImage: `url('${bgImage}')` }}></div>
             <div className="absolute inset-0 bg-[#1E3A5F]/60"></div>
-            
+
             <div className="relative max-w-5xl mx-auto px-6 py-24 md:py-32">
                 <div className="text-center space-y-6">
                     <div className="inline-block">

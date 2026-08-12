@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 
 .env
+
+# Copied in from node_modules by scripts/sync-cms.mjs on every dev run and
+# build. The version is pinned in package.json, so it does not belong in git.
+public/admin/sveltia-cms.js

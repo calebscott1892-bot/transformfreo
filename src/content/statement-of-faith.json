@@ -1,0 +1,15 @@
+{
+  "hero": {
+    "title": "Statement of Faith",
+    "subtitle": "The foundational truths that unite us",
+    "image": "/images/hero-statement-of-faith.jpg"
+  },
+  "heading": "The Apostles' Creed",
+  "intro": "We share the core beliefs of the Bible as outlined in this historic creed:",
+  "stanzas": [
+    "I believe in God, the Father almighty,\ncreator of heaven and earth.",
+    "I believe in Jesus Christ, his only Son, our Lord,\nwho was conceived by the Holy Spirit,\nborn of the virgin Mary,\nsuffered under Pontius Pilate,\nwas crucified, died, and was buried;\nhe descended to the dead.\nOn the third day he rose again;\nhe ascended into heaven,\nhe is seated at the right hand of the Father,\nand he will come to judge the living and the dead.",
+    "I believe in the Holy Spirit,\nthe holy Christian church,\nthe communion of saints,\nthe forgiveness of sins,\nthe resurrection of the body,\nand the life everlasting."
+  ],
+  "closing": "Amen."
+}

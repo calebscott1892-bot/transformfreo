@@ -1,0 +1,450 @@
+# Transform Fremantle — website editor configuration
+#
+# ─────────────────────────────────────────────────────────────────────────────
+# IF THE GITHUB REPOSITORY EVER MOVES TO A DIFFERENT ACCOUNT, change the `repo:`
+# line below to match. It is the only line in this file tied to who owns the
+# site. Everything else is about what editors can change.
+# ─────────────────────────────────────────────────────────────────────────────
+
+backend:
+  name: github
+  repo: c4studios/transformfreo
+  branch: main
+  # Points the login button at this site's own /api/auth function rather than a
+  # third-party auth service. See api/auth.js and api/callback.js.
+  base_url: https://transformfreo.com
+  auth_endpoint: api/auth
+  commit_messages:
+    create: 'Add {{collection}} "{{slug}}"'
+    update: 'Update {{collection}}'
+    delete: 'Remove {{collection}} "{{slug}}"'
+    uploadMedia: 'Upload {{path}}'
+    deleteMedia: 'Delete {{path}}'
+
+# Save publishes straight away. No draft or review step to learn.
+publish_mode: simple
+
+site_url: https://transformfreo.com
+display_url: https://transformfreo.com
+logo_url: /images/logo.png
+
+# Photos uploaded through the editor land here.
+media_folder: public/images
+public_folder: /images
+
+collections:
+  # ───────────────────────────────────────────────────────────────────────────
+  - name: pages
+    label: Pages
+    files:
+      - name: about
+        label: About Us (home page)
+        file: src/content/about.json
+        description: The first page people land on, and the prayer meeting times.
+        fields:
+          - label: Banner
+            name: hero
+            widget: object
+            fields:
+              - { label: Heading, name: title, widget: string }
+              - { label: Line underneath, name: subtitle, widget: string, required: false }
+              - label: Background photo
+                name: image
+                widget: image
+                required: false
+                hint: Landscape photos work best. Text sits over the middle of this image.
+
+          - label: Opening paragraphs
+            name: intro
+            widget: object
+            fields:
+              - label: Paragraphs
+                name: paragraphs
+                widget: list
+                field: { label: Paragraph, name: paragraph, widget: text }
+                hint: Each entry becomes its own paragraph. Drag to reorder.
+
+          - label: Prayer meetings heading
+            name: meetingsSection
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Intro text, name: intro, widget: text }
+
+          - label: Prayer meetings
+            name: meetings
+            label_singular: meeting
+            widget: list
+            summary: '{{fields.day}} — {{fields.location}}'
+            hint: Drag to reorder. Use the bin icon to remove a meeting that has stopped.
+            fields:
+              - { label: Day, name: day, widget: string, hint: 'For example: Mondays' }
+              - { label: Time, name: time, widget: string, hint: 'For example: 7:30–8:30pm' }
+              - { label: Location, name: location, widget: string, required: false }
+              - { label: Address, name: address, widget: string, required: false }
+              - label: Extra note
+                name: note
+                widget: string
+                required: false
+                hint: Optional. Shows in small grey text under the time.
+              - label: Mark as "Coming Soon"
+                name: comingSoon
+                widget: boolean
+                required: false
+                default: false
+                hint: Greys the meeting out and adds a Coming Soon tag.
+
+          - label: Closing panel
+            name: unity
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Quote, name: quote, widget: text }
+              - { label: Body text, name: body, widget: text }
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: statement_of_faith
+        label: Statement of Faith
+        file: src/content/statement-of-faith.json
+        fields:
+          - label: Banner
+            name: hero
+            widget: object
+            fields:
+              - { label: Heading, name: title, widget: string }
+              - { label: Line underneath, name: subtitle, widget: string, required: false }
+              - { label: Background photo, name: image, widget: image, required: false }
+
+          - { label: Heading, name: heading, widget: string }
+          - { label: Intro text, name: intro, widget: text }
+
+          - label: Creed
+            name: stanzas
+            label_singular: stanza
+            widget: list
+            field: { label: Stanza, name: stanza, widget: text }
+            hint: >-
+              One entry per stanza. Press Enter inside a stanza to start a new
+              line — the first line of each stanza sits flush and every line
+              after it is indented.
+
+          - { label: Closing word, name: closing, widget: string, required: false }
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: vision
+        label: Vision & Aim
+        file: src/content/vision.json
+        fields:
+          - label: Banner
+            name: hero
+            widget: object
+            fields:
+              - { label: Heading, name: title, widget: string }
+              - { label: Line underneath, name: subtitle, widget: string, required: false }
+              - { label: Background photo, name: image, widget: image, required: false }
+
+          - label: Vision panel
+            name: vision
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+          - label: Aims heading
+            name: aimsSection
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Intro text, name: intro, widget: text }
+
+          - label: Aims
+            name: aims
+            label_singular: aim
+            widget: list
+            summary: '{{fields.number}} — {{fields.title}}'
+            hint: Card colours are applied automatically in order, so you can add or reorder freely.
+            fields:
+              - { label: Number, name: number, widget: string, hint: 'For example: 01' }
+              - label: Icon
+                name: icon
+                widget: select
+                default: crown
+                options:
+                  - book
+                  - bookOpen
+                  - building
+                  - calendar
+                  - church
+                  - crown
+                  - facebook
+                  - globe
+                  - handshake
+                  - heart
+                  - home
+                  - instagram
+                  - lightbulb
+                  - mail
+                  - mapPin
+                  - messageCircle
+                  - music
+                  - phone
+                  - sparkles
+                  - sun
+                  - users
+                  - youtube
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+
+          - label: Closing panel
+            name: closing
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: resources_page
+        label: Resources page wording
+        file: src/content/resources.json
+        description: The wording on the Resources page. The booklets themselves are under "Resource booklets".
+        fields:
+          - label: Banner
+            name: hero
+            widget: object
+            fields:
+              - { label: Heading, name: title, widget: string }
+              - { label: Line underneath, name: subtitle, widget: string, required: false }
+              - { label: Background photo, name: image, widget: image, required: false }
+
+          - label: Intro panel
+            name: intro
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+          - label: Default label under a booklet title
+            name: fallbackLabel
+            widget: string
+            hint: Used when a booklet has no description of its own.
+
+          - label: Closing panel
+            name: cta
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+              - { label: Small note, name: note, widget: string, required: false }
+
+      # ─────────────────────────────────────────────────────────────────────
+      - name: connect
+        label: Connect
+        file: src/content/connect.json
+        description: Contact form wording, phone number, social links and bank details.
+        fields:
+          - label: Banner
+            name: hero
+            widget: object
+            fields:
+              - { label: Heading, name: title, widget: string }
+              - { label: Line underneath, name: subtitle, widget: string, required: false }
+              - { label: Background photo, name: image, widget: image, required: false }
+
+          - label: Phone number
+            name: phone
+            widget: object
+            fields:
+              - { label: As shown on the page, name: display, widget: string, hint: 'For example: 0404 077 194' }
+              - label: For the tap-to-call link
+                name: tel
+                widget: string
+                pattern: ['^[0-9+]+$', 'Digits only, no spaces. A leading + is allowed.']
+                hint: The same number with no spaces, e.g. 0404077194
+
+          - label: Contact form wording
+            name: form
+            widget: object
+            collapsed: true
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Line underneath, name: subheading, widget: string }
+              - { label: Name field label, name: nameLabel, widget: string }
+              - { label: Name field example text, name: namePlaceholder, widget: string }
+              - { label: Email field label, name: emailLabel, widget: string }
+              - { label: Email field example text, name: emailPlaceholder, widget: string }
+              - { label: Church field label, name: churchLabel, widget: string }
+              - { label: Church field example text, name: churchPlaceholder, widget: string }
+              - { label: Message field label, name: messageLabel, widget: string }
+              - { label: Message field example text, name: messagePlaceholder, widget: string }
+              - { label: Send button, name: buttonLabel, widget: string }
+              - { label: Send button while sending, name: buttonSendingLabel, widget: string }
+              - label: Message shown after a successful send
+                name: successMessage
+                widget: text
+
+          - label: "\"Ways to Connect\" panel"
+            name: waysToConnect
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+          - label: Ways to connect
+            name: options
+            label_singular: way to connect
+            widget: list
+            summary: '{{fields.title}}'
+            fields:
+              - label: Icon
+                name: icon
+                widget: select
+                default: mail
+                options:
+                  - book
+                  - bookOpen
+                  - building
+                  - calendar
+                  - church
+                  - crown
+                  - facebook
+                  - globe
+                  - handshake
+                  - heart
+                  - home
+                  - instagram
+                  - lightbulb
+                  - mail
+                  - mapPin
+                  - messageCircle
+                  - music
+                  - phone
+                  - sparkles
+                  - sun
+                  - users
+                  - youtube
+              - { label: Title, name: title, widget: string }
+              - { label: Description, name: description, widget: text }
+              - label: Show the phone number here
+                name: usePhone
+                widget: boolean
+                required: false
+                default: false
+                hint: Uses the phone number set above, so you only ever change it in one place.
+              - label: Button link
+                name: link
+                widget: string
+                required: false
+                hint: Optional. A full web address starting with https://
+              - { label: Button text, name: linkLabel, widget: string, required: false }
+
+          - label: Giving & bank details
+            name: giving
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+              - { label: Bank panel heading, name: detailsHeading, widget: string }
+              - { label: Bank panel text, name: detailsText, widget: text }
+              - { label: Account name, name: accountName, widget: string }
+              - label: BSB
+                name: bsb
+                widget: string
+                pattern: ['^[0-9]{6}$', 'A BSB is exactly 6 digits, no dash.']
+              - label: Account number
+                name: accountNumber
+                widget: string
+                pattern: ['^[0-9]{5,10}$', 'An account number is 5 to 10 digits.']
+
+          - label: Location panel
+            name: location
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+          - label: Closing panel
+            name: closing
+            widget: object
+            fields:
+              - { label: Heading, name: heading, widget: string }
+              - { label: Text, name: text, widget: text }
+
+  # ───────────────────────────────────────────────────────────────────────────
+  - name: resources
+    label: Resource booklets
+    files:
+      - name: booklets
+        label: Resource booklets
+        file: src/resources/resources.overrides.json
+        description: >-
+          Upload a PDF and give it a title. The download list on the Resources
+          page is built from this, in the order shown here.
+        fields:
+          - label: Booklets
+            name: items
+            label_singular: booklet
+            widget: list
+            summary: '{{fields.displayName}}'
+            fields:
+              - label: PDF file
+                name: filename
+                widget: file
+                media_folder: /public/files
+                public_folder: /files
+                media_library:
+                  config:
+                    max_file_size: 26214400
+                hint: Choose an existing PDF or upload a new one. Max 25 MB.
+              - { label: Title shown on the website, name: displayName, widget: string }
+              - label: Edition
+                name: edition
+                widget: string
+                required: false
+                hint: 'Optional, for your own reference. For example: January 2026 Edition'
+              - label: Short description
+                name: description
+                widget: string
+                required: false
+                hint: Optional. Replaces "PDF Document" underneath the title.
+              - label: Hide from the website
+                name: deprecated
+                widget: boolean
+                required: false
+                default: false
+                hint: Keeps the file but takes it off the Resources page.
+
+  # ───────────────────────────────────────────────────────────────────────────
+  - name: settings
+    label: Site-wide
+    files:
+      - name: site
+        label: Name, logo, menu & footer
+        file: src/content/site.json
+        description: Appears on every page.
+        fields:
+          - { label: Site name, name: name, widget: string }
+          - { label: Tagline, name: tagline, widget: string, hint: The small line under the site name in the header. }
+          - label: Logo
+            name: logo
+            widget: image
+            hint: Square images work best. Shown at small sizes in the header and footer.
+
+          - label: Menu labels
+            name: nav
+            widget: object
+            hint: Renames the menu items. The pages themselves stay where they are.
+            fields:
+              - { label: 'Page 1 (home)', name: AboutUs, widget: string }
+              - { label: 'Page 2', name: StatementOfFaith, widget: string }
+              - { label: 'Page 3', name: VisionAndAim, widget: string }
+              - { label: 'Page 4', name: Resources, widget: string }
+              - { label: 'Page 5', name: Connect, widget: string }
+
+          - label: Footer
+            name: footer
+            widget: object
+            fields:
+              - { label: Blurb under the logo, name: blurb, widget: text }
+              - { label: Links column heading, name: quickLinksHeading, widget: string }
+              - { label: Vision column heading, name: visionHeading, widget: string }
+              - { label: Vision column text, name: visionText, widget: text }

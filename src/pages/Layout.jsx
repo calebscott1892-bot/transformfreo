@@ -3,17 +3,20 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils/utils.js';
 import { Menu, X } from 'lucide-react';
+import C4FooterCredit from '@/components/c4-footer-credit/C4FooterCredit';
+import site from '@/content/site.json';
+
+// Route keys are fixed in code so a content edit can never break navigation.
+// site.json only supplies the label shown for each one.
+const NAV_ROUTES = ['AboutUs', 'StatementOfFaith', 'VisionAndAim', 'Resources', 'Connect'];
 
 export default function Layout({ children, currentPageName }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const navItems = [
-        { name: 'About Us', path: 'AboutUs' },
-        { name: 'Statement of Faith', path: 'StatementOfFaith' },
-        { name: 'Vision & Aim', path: 'VisionAndAim' },
-        { name: 'Resources', path: 'Resources' },
-        { name: 'Connect', path: 'Connect' }
-    ];
+    const navItems = NAV_ROUTES.map((path) => ({
+        path,
+        name: site.nav?.[path] || path
+    }));
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-amber-50/20 to-slate-50">
@@ -34,15 +37,17 @@ export default function Layout({ children, currentPageName }) {
                         {/* Logo */}
                         <Link to={createPageUrl('AboutUs')} className="flex items-center gap-3 group">
                             <div className="relative">
-                                <img 
-                                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/78da45737_test2.png"
-                                    alt="Transform Fremantle Logo"
+                                <img
+                                    src={site.logo}
+                                    alt={`${site.name} Logo`}
+                                    width="44"
+                                    height="44"
                                     className="w-11 h-11 object-contain transform transition-transform group-hover:scale-105"
                                 />
                             </div>
                             <div>
-                                <h1 className="text-xl font-bold text-[#1E3A5F] tracking-tight">Transform Fremantle</h1>
-                                <p className="text-xs text-slate-500 tracking-wide">United in Prayer</p>
+                                <h1 className="text-xl font-bold text-[#1E3A5F] tracking-tight">{site.name}</h1>
+                                <p className="text-xs text-slate-500 tracking-wide">{site.tagline}</p>
                             </div>
                         </Link>
 
@@ -66,6 +71,8 @@ export default function Layout({ children, currentPageName }) {
                         {/* Mobile Menu Button */}
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                            aria-expanded={mobileMenuOpen}
                             className="md:hidden p-2 text-slate-600 hover:text-[#1E3A5F] hover:bg-slate-100 rounded-lg transition-colors"
                         >
                             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -105,19 +112,21 @@ export default function Layout({ children, currentPageName }) {
                     <div className="grid md:grid-cols-3 gap-8 mb-8">
                         <div>
                             <div className="flex items-center gap-2 mb-4">
-                                <img 
-                                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/692045aca399a9594f748006/78da45737_test2.png"
-                                    alt="Transform Fremantle"
+                                <img
+                                    src={site.logo}
+                                    alt=""
+                                    width="20"
+                                    height="20"
                                     className="w-5 h-5 object-contain"
                                 />
-                                <h3 className="font-bold text-lg">Transform Fremantle</h3>
+                                <h3 className="font-bold text-lg">{site.name}</h3>
                             </div>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                A group of Christians united in prayer for the transformation of the City of Fremantle.
+                                {site.footer?.blurb}
                             </p>
                         </div>
                         <div>
-                            <h4 className="font-semibold mb-4 text-[#E8C468]">Quick Links</h4>
+                            <h4 className="font-semibold mb-4 text-[#E8C468]">{site.footer?.quickLinksHeading}</h4>
                             <div className="space-y-2">
                                 {navItems.map((item) => (
                                     <Link
@@ -131,14 +140,19 @@ export default function Layout({ children, currentPageName }) {
                             </div>
                         </div>
                         <div>
-                            <h4 className="font-semibold mb-4 text-[#E8C468]">Our Vision</h4>
+                            <h4 className="font-semibold mb-4 text-[#E8C468]">{site.footer?.visionHeading}</h4>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                For Fremantle to be a peaceful city where many encounter Jesus, experience real life change, and go on to serve Christ.
+                                {site.footer?.visionText}
                             </p>
                         </div>
                     </div>
-                    <div className="pt-8 border-t border-slate-700 text-center text-sm text-slate-400">
-                        <p>© {new Date().getFullYear()} Transform Fremantle. All rights reserved.</p>
+                    <div className="pt-8 border-t border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-400">
+                        <p>© {new Date().getFullYear()} {site.name}. All rights reserved.</p>
+                        <C4FooterCredit
+                            href="https://c4studios.com.au"
+                            size="small"
+                            colorScheme="dark"
+                        />
                     </div>
                 </div>
             </footer>

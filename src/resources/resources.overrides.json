@@ -1,33 +1,34 @@
 {
-  "byFilename": {
-    "a-biblical-guide-to-resolving-personal-conflict.pdf": {
+  "items": [
+    {
+      "filename": "/files/a-biblical-guide-to-resolving-personal-conflict.pdf",
       "displayName": "A Biblical Guide to Resolving Personal Conflict",
-      "edition": "January 2026 Edition"
+      "edition": "January 2026 Edition",
+      "deprecated": false
     },
-    "confession-repentance-and-forgiveness-of-sin.pdf": {
+    {
+      "filename": "/files/confession-repentance-and-forgiveness-of-sin.pdf",
       "displayName": "Confession, Repentance and Forgiveness of Sin",
-      "edition": "January 2026 Edition"
+      "edition": "January 2026 Edition",
+      "deprecated": false
     },
-    "confession-repentance-and-forgiveness-of-sin.pdf.pdf": {
-      "deprecated": true
-    },
-    "lessons-from-past-revivals.pdf": {
+    {
+      "filename": "/files/lessons-from-past-revivals.pdf",
       "displayName": "Lessons from Past Revivals",
-      "edition": "January 2026 Edition"
+      "edition": "January 2026 Edition",
+      "deprecated": false
     },
-    "lessons-from-past-revivals.pdf.pdf": {
-      "deprecated": true
-    },
-    "orderly-worship-and-the-use-of-spiritual-gifts.pdf": {
+    {
+      "filename": "/files/orderly-worship-and-the-use-of-spiritual-gifts.pdf",
       "displayName": "Orderly Worship & the Use of Spiritual Gifts",
-      "edition": "January 2026 Edition"
+      "edition": "January 2026 Edition",
+      "deprecated": false
     },
-    "orderly-worship-and-the-use-of-spiritual-gifts.pdf.pdf": {
-      "deprecated": true
-    },
-    "what-is-salvation-and-what-should-i-do-next.pdf": {
+    {
+      "filename": "/files/what-is-salvation-and-what-should-i-do-next.pdf",
       "displayName": "What is Salvation? And What Should I do Next?",
-      "edition": "January 2026 Edition"
+      "edition": "January 2026 Edition",
+      "deprecated": false
     }
-  }
+  ]
 }

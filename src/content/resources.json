@@ -1,0 +1,17 @@
+{
+  "hero": {
+    "title": "Resources",
+    "subtitle": "Equipping you to pray and partner with God's work in Fremantle",
+    "image": "/images/hero-resources.jpg"
+  },
+  "intro": {
+    "heading": "Available Resources",
+    "text": "Explore our range of biblically-based resources."
+  },
+  "fallbackLabel": "PDF Document",
+  "cta": {
+    "heading": "After Something Specific?",
+    "text": "If you're looking for a particular resource or have suggestions for materials we should create, we'd love to hear from you.",
+    "note": "Get in touch via our Connect page"
+  }
+}

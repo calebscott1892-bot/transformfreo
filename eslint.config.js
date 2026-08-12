@@ -5,7 +5,9 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist'] },
+  // `public/admin/sveltia-cms.js` is the third-party CMS bundle copied in from
+  // node_modules by scripts/sync-cms.mjs. It is minified vendor code, not ours.
+  { ignores: ['dist', 'public/admin/sveltia-cms.js'] },
   {
     files: [
       'api/**/*.{js,jsx}',
